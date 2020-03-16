@@ -1,9 +1,24 @@
 #include "holberton.h"
 
+/**
+ * printf_c - prints a character
+ *
+ * @list: imported argument list
+ *
+ * Return: void
+ */
 void printf_c(va_list list)
 {
 	_putchar(va_arg(list, int));
 }
+
+/**
+ * printf_str - prints a string daddy
+ *
+ * @list: imported argument list
+ *
+ * Return: void
+ */
 
 void printf_str(va_list list)
 {
