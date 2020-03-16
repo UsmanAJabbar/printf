@@ -1,6 +1,6 @@
 #include <stdarg.h>
 #include "holberton.h"
-
+#include <stdio.h>
 /**
  * print_all - acts a printf function
  * @format: contains specifiers
@@ -9,14 +9,14 @@
 
 void _printf(const char *format, ...)
 {
-	int index = 0
+	int index = 0;
 	int jindex;
 	va_list arguments;
 
 	f_call options[] = {
 		{'c', printf_c},
-		{'i', printf_i},
-		{'f', printf_f},
+		/*{'i', printf_i},
+		{'f', printf_f},*/
 		{'s', printf_str},
 	};
 
@@ -24,18 +24,43 @@ void _printf(const char *format, ...)
 
 	while (format && format[index]) /* while there's something to test */
 	{
-		jindex = 0;
-
-		while (jindex < 4) /* while all of modulus hasn't been checked, check! */
+		if (format[index] == '%')
 		{
-			if (format[index] == options[jindex].c) /* if match found */
+			index++; /* Let's go check what the next character is */
+
+			if (format[index] == '%')	/* If the next char is a percent... */
 			{
-				options[jindex].f(arguments); /* modulus masking printf func */
-				break; /* if found, break */
+				_putchar('%');		/* print it! */
 			}
-			jindex++; /* if no match, check the next array in modulus */
+			else				/* else... */
+			{
+				jindex = 0;
+
+				while (jindex < 2)
+				{
+					/**
+					* If the next char is equal to the char
+					* of one of the structs in options[], then use
+					* the function associated with that char.
+					*/
+					if (format[index] == options[jindex].c)
+					{
+						options[jindex].f(arguments);
+					}
+
+					jindex++;
+				}
+			}
 		}
-		index++; /* check the next specifier in format */
+		/*else if (format[index] == '\')
+		{
+		}*/
+		else
+		{
+			_putchar(format[index]);
+		}
+	index++;
+
 	}
 	va_end(arguments); /* clear all + memory */
 }
