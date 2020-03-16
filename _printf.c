@@ -61,9 +61,11 @@ int get_printer(char c, va_list arguments)
 	f_call options[] = {
 		{'c', printf_c},
 		{'s', printf_str},
+		{'d', printf_i_d},
+		{'i', printf_i_d},
 	};
 
-	while (i < 2)
+	while (i < 4)
 	{
 		if (c == options[i].c)
 		{
