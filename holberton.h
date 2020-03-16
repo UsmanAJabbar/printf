@@ -4,11 +4,18 @@
 #include <stdarg.h>
 
 int _printf(const char *format, ...);
+int _putchar(char c);
 
 typedef struct f_call
 {
-	char *c;
+	char c;
 	void (*f)(va_list);
 } f_call;
+
+int get_printer(char, va_list);
+void printf_c(va_list);
+void printf_int(va_list);
+void printf_f(va_list);
+void printf_str(va_list);
 
 #endif
