@@ -64,9 +64,10 @@ int get_printer(char c, va_list arguments)
 		{'s', printf_str},
 		{'d', printf_i_d},
 		{'i', printf_i_d},
+		{'r', printf_r},
 	};
 
-	while (i < 4)
+	while (i < 5)
 	{
 		if (c == options[i].c)
 		{
