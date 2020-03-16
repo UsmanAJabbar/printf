@@ -12,8 +12,9 @@ typedef struct f_call
 	void (*f)(va_list);
 } f_call;
 
+int get_printer(char, va_list);
 void printf_c(va_list);
-void printf_i(va_list);
+void printf_int(va_list);
 void printf_f(va_list);
 void printf_str(va_list);
 
