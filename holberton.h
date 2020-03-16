@@ -5,10 +5,10 @@
 
 int _printf(const char *format, ...);
 
-typedef struct function_caller
+typedef struct f_call
 {
 	char *c;
-	void (*function)(va_list);
-} function_caller;
+	void (*f)(va_list);
+} f_call;
 
 #endif

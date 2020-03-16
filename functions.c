@@ -2,7 +2,7 @@
 
 void printf_c(var_list)
 {
-	return (write(1, &c, 1));
+	_putchar(formatter)
 }
 
 void print_str(var_list)
