@@ -5,11 +5,12 @@
  *
  * @list: imported argument list
  *
- * Return: void
+ * Return: 0
  */
-void printf_c(va_list list)
+int printf_c(va_list list)
 {
 	_putchar(va_arg(list, int));
+	return (0);
 }
 
 /**
@@ -17,24 +18,34 @@ void printf_c(va_list list)
  *
  * @list: imported argument list
  *
- * Return: void
+ * Return: strlen
  */
 
-void printf_str(va_list list)
+int printf_str(va_list list)
 {
-	int index;
+	int index; /* prints the numbers */
+	int count = -1; /* captures the strlen */
 	char *str = va_arg(list, char *);
 
 	for (index = 0; str[index] != '\0'; index++)
 	{
 		_putchar(str[index]);
+		count++;
 	}
+	return (count);
 }
 
-void printf_i_d(va_list list)
+/**
+ * printf_i_d - prints numbers
+ * @list: va_list
+ * Return: strlen
+ */
+
+int printf_i_d(va_list list)
 {
 	int temp;
 	int size = 1;
+	int count = -1;
 	int n = va_arg(list, int);
 
 	/* check if its INT_MIN as edge case */
@@ -69,5 +80,7 @@ void printf_i_d(va_list list)
 		temp = n / size;
 		_putchar(temp + '0');
 		n = n % size;
+		count++;
 	}
+	return (count);
 }
