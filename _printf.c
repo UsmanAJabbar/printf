@@ -7,11 +7,12 @@
  * Return: Void
  */
 
-void _printf(const char *format, ...)
+int _printf(const char *format, ...)
 {
 	int index = 0;
 	int jindex;
 	va_list arguments;
+	int char_count = 0;
 
 	f_call options[] = {
 		{'c', printf_c},
@@ -60,7 +61,8 @@ void _printf(const char *format, ...)
 			_putchar(format[index]);
 		}
 	index++;
-
+	char_count++;
 	}
 	va_end(arguments); /* clear all + memory */
+	return (char_count);
 }
