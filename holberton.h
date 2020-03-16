@@ -6,6 +6,11 @@
 int _printf(const char *format, ...);
 int _putchar(char c);
 
+/**
+ * struct f_call - whateva
+ * @c: format specifier scanner
+ * @f: function caller
+ */
 typedef struct f_call
 {
 	char c;

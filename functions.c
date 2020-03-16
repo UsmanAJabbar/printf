@@ -5,7 +5,7 @@
  *
  * @list: imported argument list
  *
- * Return: void
+ * Return: 0
  */
 int printf_c(va_list list)
 {
@@ -18,7 +18,7 @@ int printf_c(va_list list)
  *
  * @list: imported argument list
  *
- * Return: void
+ * Return: strlen
  */
 
 int printf_str(va_list list)
@@ -34,6 +34,12 @@ int printf_str(va_list list)
 	}
 	return (count);
 }
+
+/**
+ * printf_i_d - prints numbers
+ * @list: va_list
+ * Return: strlen
+ */
 
 int printf_i_d(va_list list)
 {
