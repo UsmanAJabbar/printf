@@ -10,9 +10,9 @@
 int _printf(const char *format, ...)
 {
 	int index = 0;
-	int error_check;
-	va_list arguments;
+	int len_f = 0;
 	int strlen = 0;
+	va_list arguments;
 
 	va_start(arguments, format);
 
@@ -30,8 +30,8 @@ int _printf(const char *format, ...)
 				 * and pick/use the corresponding printing function;
 				 * get_printer returns -1 if it found no match. In which case, return -1.
 				 */
-				error_check = get_printer(format[index], arguments);
-				if (error_check == -1)
+				len_f = get_printer(format[index], arguments);
+				if (len_f == -1)
 					return (-1);
 			}
 		}
@@ -43,7 +43,7 @@ int _printf(const char *format, ...)
 	strlen++;
 	}
 	va_end(arguments);				/* clear all + memory */
-	return (strlen);
+	return (strlen + len_f);
 }
 
 /**
@@ -58,6 +58,7 @@ int _printf(const char *format, ...)
 int get_printer(char c, va_list arguments)
 {
 	int i = 0;
+	int strlen = 0;
 	f_call options[] = {
 		{'c', printf_c},
 		{'s', printf_str},
@@ -69,8 +70,8 @@ int get_printer(char c, va_list arguments)
 	{
 		if (c == options[i].c)
 		{
-			options[i].f(arguments);
-			return (0);
+			strlen = options[i].f(arguments);
+			return (strlen);
 		}
 		i++;
 	}

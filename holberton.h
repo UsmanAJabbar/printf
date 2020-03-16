@@ -9,12 +9,12 @@ int _putchar(char c);
 typedef struct f_call
 {
 	char c;
-	void (*f)(va_list);
+	int (*f)(va_list);
 } f_call;
 
 int get_printer(char, va_list);
-void printf_c(va_list);
-void printf_str(va_list);
-void printf_i_d(va_list);
+int printf_c(va_list);
+int printf_str(va_list);
+int printf_i_d(va_list);
 
 #endif
