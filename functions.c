@@ -1,5 +1,5 @@
 #include "holberton.h"
-
+#include <stdio.h>
 /**
  * printf_c - prints a character
  *
@@ -27,11 +27,25 @@ int printf_str(va_list list)
 	int count = -1; /* captures the strlen */
 	char *str = va_arg(list, char *);
 
-	for (index = 0; str[index] != '\0'; index++)
+	if (str == NULL)
 	{
-		_putchar(str[index]);
-		count++;
+		_putchar('(');
+		_putchar('n');
+		_putchar('u');
+		_putchar('l');
+		_putchar('l');
+		_putchar(')');
+		count = 5;
 	}
+	else
+	{
+		for (index = 0; str[index] != '\0'; index++)
+		{
+			_putchar(str[index]);
+			count++;
+		}
+	}
+
 	return (count);
 }
 
@@ -63,6 +77,7 @@ int printf_i_d(va_list list)
 	{
 		_putchar('-');
 		n = -n;
+		count++;
 	}
 
 	temp = n;
