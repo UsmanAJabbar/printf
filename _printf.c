@@ -20,7 +20,7 @@ int _printf(const char *format, ...)
 	/* Use confirm_print func to check for errors. */
 	error_check = confirm_print(format);
 	if (error_check == -1)
-		return(-1);
+		return (-1);
 
 	while (format && format[index])			/* while there's something to test */
 	{
