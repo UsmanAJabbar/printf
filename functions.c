@@ -70,7 +70,6 @@ int printf_i_d(va_list list)
 		n = n % 1000000000;
 		n = -n;
 	}
-
 	/* if input is negative, postive it */
 	/* manually print the '-' sign */
 	if (n < 0)
@@ -81,14 +80,12 @@ int printf_i_d(va_list list)
 	}
 
 	temp = n;
-
 	/* calculate the # of digits of n */
 	while (temp / 10 != 0)
 	{
 		temp = temp / 10;
 		size = size * 10;
 	}
-
 	/* print digits one at a time from start */
 	for (; size > 0; size /= 10)
 	{

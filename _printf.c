@@ -87,7 +87,7 @@ int get_printer(char c, va_list arguments)
  *
  * Return: -1 if error found, 0 if format is safe to print
  */
-int confirm_print(const char * format)
+int confirm_print(const char *format)
 {
 	int index = 0;
 	int jindex = 0;
