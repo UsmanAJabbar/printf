@@ -20,7 +20,7 @@ int _printf(const char *format, ...)
 	/* Use confirm_print func to check for errors. */
 	error_check = confirm_print(format);
 	if (error_check == -1)
-		exit(1);
+		return(-1);
 
 	while (format && format[index])			/* while there's something to test */
 	{
@@ -93,6 +93,7 @@ int confirm_print(const char *format)
 	int index = 0;
 	int jindex = 0;
 	char *specifier = "csdirR%";
+	int percent_check = 0;
 
 	if (format == NULL)
 		return (-1);
@@ -105,6 +106,7 @@ int confirm_print(const char *format)
 		if (format[index] == '%')		/* check if the char is a % */
 		{
 			index++;
+			percent_check++;
 			/**
 			 * if so, go to the next char and check if its
 			 * one of our approved format specifiers.
@@ -122,5 +124,7 @@ int confirm_print(const char *format)
 		index++;
 	}
 	/* If no matches were found, return -1 */
-	return (-1);
+	if (percent_check != 0)
+		return (-1);
+	return (0);
 }
