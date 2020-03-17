@@ -69,6 +69,8 @@ int printf_i_d(va_list list)
 		_putchar('2');
 		n = n % 1000000000;
 		n = -n;
+		count++;
+		count++;
 	}
 	/* if input is negative, postive it */
 	/* manually print the '-' sign */
