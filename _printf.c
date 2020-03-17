@@ -20,7 +20,7 @@ int _printf(const char *format, ...)
 	/* Use confirm_print func to check for errors. */
 	error_check = confirm_print(format);
 	if (error_check == -1)
-		return (-1);
+		exit(1);
 
 	while (format && format[index])			/* while there's something to test */
 	{
@@ -66,9 +66,10 @@ int get_printer(char c, va_list arguments)
 		{'d', printf_i_d},
 		{'i', printf_i_d},
 		{'r', printf_r},
+		{'R', printf_R},
 	};
 
-	while (i < 5)
+	while (i < 6)
 	{
 		if (c == options[i].c)
 		{
@@ -91,7 +92,10 @@ int confirm_print(const char *format)
 {
 	int index = 0;
 	int jindex = 0;
-	char *specifier = "csdir%";
+	char *specifier = "csdirR%";
+
+	if (format == NULL)
+		return (-1);
 
 	if (!(format || format[index]))			/* if string is empty or null, return 0 */
 		return (0);
