@@ -21,5 +21,7 @@ int get_printer(char, va_list);
 int printf_c(va_list);
 int printf_str(va_list);
 int printf_i_d(va_list);
+int printf_r(va_list);
+int printf_R(va_list);
 
 #endif
