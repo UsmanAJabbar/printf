@@ -944,3 +944,293 @@ Looking by char:[y]
 Entering j loop 51 
 Looking for char:[!]
 Looking by char:[z]
+UvChecking
+Entering the loop 0 
+Entering j loop 0 
+Looking for char:[H]
+Looking by char:[A]
+Entering j loop 1 
+Looking for char:[H]
+Looking by char:[B]
+Entering j loop 2 
+Looking for char:[H]
+Looking by char:[C]
+Entering j loop 3 
+Looking for char:[H]
+Looking by char:[D]
+Entering j loop 4 
+Looking for char:[H]
+Looking by char:[E]
+Entering j loop 5 
+Looking for char:[H]
+Looking by char:[F]
+Entering j loop 6 
+Looking for char:[H]
+Looking by char:[G]
+Entering j loop 7 
+Looking for char:[H]
+Looking by char:[H]
+entered the if loop 7Entering the loop 1 
+Entering j loop 0 
+Looking for char:[i]
+Looking by char:[A]
+Entering j loop 1 
+Looking for char:[i]
+Looking by char:[B]
+Entering j loop 2 
+Looking for char:[i]
+Looking by char:[C]
+Entering j loop 3 
+Looking for char:[i]
+Looking by char:[D]
+Entering j loop 4 
+Looking for char:[i]
+Looking by char:[E]
+Entering j loop 5 
+Looking for char:[i]
+Looking by char:[F]
+Entering j loop 6 
+Looking for char:[i]
+Looking by char:[G]
+Entering j loop 7 
+Looking for char:[i]
+Looking by char:[H]
+Entering j loop 8 
+Looking for char:[i]
+Looking by char:[I]
+Entering j loop 9 
+Looking for char:[i]
+Looking by char:[J]
+Entering j loop 10 
+Looking for char:[i]
+Looking by char:[K]
+Entering j loop 11 
+Looking for char:[i]
+Looking by char:[L]
+Entering j loop 12 
+Looking for char:[i]
+Looking by char:[M]
+Entering j loop 13 
+Looking for char:[i]
+Looking by char:[N]
+Entering j loop 14 
+Looking for char:[i]
+Looking by char:[O]
+Entering j loop 15 
+Looking for char:[i]
+Looking by char:[P]
+Entering j loop 16 
+Looking for char:[i]
+Looking by char:[Q]
+Entering j loop 17 
+Looking for char:[i]
+Looking by char:[R]
+Entering j loop 18 
+Looking for char:[i]
+Looking by char:[S]
+Entering j loop 19 
+Looking for char:[i]
+Looking by char:[T]
+Entering j loop 20 
+Looking for char:[i]
+Looking by char:[U]
+Entering j loop 21 
+Looking for char:[i]
+Looking by char:[V]
+Entering j loop 22 
+Looking for char:[i]
+Looking by char:[W]
+Entering j loop 23 
+Looking for char:[i]
+Looking by char:[X]
+Entering j loop 24 
+Looking for char:[i]
+Looking by char:[Y]
+Entering j loop 25 
+Looking for char:[i]
+Looking by char:[Z]
+Entering j loop 26 
+Looking for char:[i]
+Looking by char:[a]
+Entering j loop 27 
+Looking for char:[i]
+Looking by char:[b]
+Entering j loop 28 
+Looking for char:[i]
+Looking by char:[c]
+Entering j loop 29 
+Looking for char:[i]
+Looking by char:[d]
+Entering j loop 30 
+Looking for char:[i]
+Looking by char:[e]
+Entering j loop 31 
+Looking for char:[i]
+Looking by char:[f]
+Entering j loop 32 
+Looking for char:[i]
+Looking by char:[g]
+Entering j loop 33 
+Looking for char:[i]
+Looking by char:[h]
+Entering j loop 34 
+Looking for char:[i]
+Looking by char:[i]
+entered the if loop 34Entering the loop 2 
+Entering j loop 0 
+Looking for char:[!]
+Looking by char:[A]
+Entering j loop 1 
+Looking for char:[!]
+Looking by char:[B]
+Entering j loop 2 
+Looking for char:[!]
+Looking by char:[C]
+Entering j loop 3 
+Looking for char:[!]
+Looking by char:[D]
+Entering j loop 4 
+Looking for char:[!]
+Looking by char:[E]
+Entering j loop 5 
+Looking for char:[!]
+Looking by char:[F]
+Entering j loop 6 
+Looking for char:[!]
+Looking by char:[G]
+Entering j loop 7 
+Looking for char:[!]
+Looking by char:[H]
+Entering j loop 8 
+Looking for char:[!]
+Looking by char:[I]
+Entering j loop 9 
+Looking for char:[!]
+Looking by char:[J]
+Entering j loop 10 
+Looking for char:[!]
+Looking by char:[K]
+Entering j loop 11 
+Looking for char:[!]
+Looking by char:[L]
+Entering j loop 12 
+Looking for char:[!]
+Looking by char:[M]
+Entering j loop 13 
+Looking for char:[!]
+Looking by char:[N]
+Entering j loop 14 
+Looking for char:[!]
+Looking by char:[O]
+Entering j loop 15 
+Looking for char:[!]
+Looking by char:[P]
+Entering j loop 16 
+Looking for char:[!]
+Looking by char:[Q]
+Entering j loop 17 
+Looking for char:[!]
+Looking by char:[R]
+Entering j loop 18 
+Looking for char:[!]
+Looking by char:[S]
+Entering j loop 19 
+Looking for char:[!]
+Looking by char:[T]
+Entering j loop 20 
+Looking for char:[!]
+Looking by char:[U]
+Entering j loop 21 
+Looking for char:[!]
+Looking by char:[V]
+Entering j loop 22 
+Looking for char:[!]
+Loo
+king by char:[W]
+Entering j loop 23 
+Looking for char:[!]
+Looking by char:[X]
+Entering j loop 24 
+Looking for char:[!]
+Looking by char:[Y]
+Entering j loop 25 
+Looking for char:[!]
+Looking by char:[Z]
+Entering j loop 26 
+Looking for char:[!]
+Looking by char:[a]
+Entering j loop 27 
+Looking for char:[!]
+Looking by char:[b]
+Entering j loop 28 
+Looking for char:[!]
+Looking by char:[c]
+Entering j loop 29 
+Looking for char:[!]
+Looking by char:[d]
+Entering j loop 30 
+Looking for char:[!]
+Looking by char:[e]
+Entering j loop 31 
+Looking for char:[!]
+Looking by char:[f]
+Entering j loop 32 
+Looking for char:[!]
+Looking by char:[g]
+Entering j loop 33 
+Looking for char:[!]
+Looking by char:[h]
+Entering j loop 34 
+Looking for char:[!]
+Looking by char:[i]
+Entering j loop 35 
+Looking for char:[!]
+Looking by char:[j]
+Entering j loop 36 
+Looking for char:[!]
+Looking by char:[k]
+Entering j loop 37 
+Looking for char:[!]
+Looking by char:[l]
+Entering j loop 38 
+Looking for char:[!]
+Looking by char:[m]
+Entering j loop 39 
+Looking for char:[!]
+Looking by char:[n]
+Entering j loop 40 
+Looking for char:[!]
+Looking by char:[o]
+Entering j loop 41 
+Looking for char:[!]
+Looking by char:[p]
+Entering j loop 42 
+Looking for char:[!]
+Looking by char:[q]
+Entering j loop 43 
+Looking for char:[!]
+Looking by char:[r]
+Entering j loop 44 
+Looking for char:[!]
+Looking by char:[s]
+Entering j loop 45 
+Looking for char:[!]
+Looking by char:[t]
+Entering j loop 46 
+Looking for char:[!]
+Looking by char:[u]
+Entering j loop 47 
+Looking for char:[!]
+Looking by char:[v]
+Entering j loop 48 
+Looking for char:[!]
+Looking by char:[w]
+Entering j loop 49 
+Looking for char:[!]
+Looking by char:[x]
+Entering j loop 50 
+Looking for char:[!]
+Looking by char:[y]
+Entering j loop 51 
+Looking for char:[!]
+Looking by char:[z]
