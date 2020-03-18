@@ -41,8 +41,12 @@ printf function accepts and parses.
 .IP %r
  - Parses and prints out reversed strings.
 
+.IP %R
+ - Parses and prints out strings in ROT13 format.
+
 .SH BUGS
 Only the checker can tell, we're just mere human beings.
+If the there are any errors, blame Jose! I didn't do it!
 
 .SH AUTHOR
 Usman.A.Jabbar | Jose Cruz Ruiz
