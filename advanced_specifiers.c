@@ -63,6 +63,7 @@ int printf_R(va_list list)
 			}
 		}
 	}
+	free(capture);
 	i--;
 	return (i); /* record and report back on the strlen */
 }
