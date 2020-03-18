@@ -52,7 +52,7 @@ int printf_R(va_list list)
 	{
 		for (j = 0; j < 95; j++) /* 52 = chars in l33t */
 		{
-			if (str[i] == real[j] || str[i] == symbols[j])
+			if (str[i] == real[j])
 			{
 				if (str[i] == real[j])
 					capture[i] = l33t[j];
