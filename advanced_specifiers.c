@@ -43,7 +43,7 @@ int printf_R(va_list list)
 	char *str = va_arg(list, char *);
 	char *capture;
 
-	capture = malloc(1);
+	capture = malloc(512);
 
 	if (capture == NULL)
 		exit(1);
