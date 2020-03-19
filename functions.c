@@ -14,7 +14,7 @@ int printf_c(va_list list)
 }
 
 /**
- * printf_str - prints a string daddy
+ * printf_str - prints a string
  *
  * @list: imported argument list
  *
