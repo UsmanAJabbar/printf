@@ -11,6 +11,7 @@ int _putchar(char c);
  * @c: format specifier scanner
  * @f: function caller
  */
+
 typedef struct f_call
 {
 	char c;
