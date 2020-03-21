@@ -4,22 +4,26 @@
 A Self-Made Printf Function By JI.Cruz and Usman Jabbar as a part of a Holberton School Curriculum.
 
 ## Requirements
-..* Linux (Recommended)
-..* gcc (>= 4.8.4)
+- Linux (Recommended)
+- gcc (>= 4.8.4)
 
 ## Files Required
-..* holberton.h
-..* _printf.c
-..* functions.c
-..* _putchar.c
-..* advanced_specifiers.c
+- holberton.h
+- _printf.c
+- functions.c
+- _putchar.c
+- advanced_specifiers.c
 
 | Files | Short Description |
+| --- | --- |
 | holberton.h | contains all prototypes |
 | _printf.c | contains the all the main logic |
 | functions.c | contains basic functions/format specifiers |
 | _putchar.c | contains function to write to buffers |
 | advanced_specifiers.c | contains all advanced format specifiers |
+
+## Added Notes
+This function makes major use of putchar in order to stay optimistic about memory since every single buffer requires a single block of memory.
 
 ## Install
 On Linux, you could either download our program as a zip or simply clone our repository to your favourite folder.
@@ -67,5 +71,5 @@ _printf("This is an example of printfing a %R, "string"); \\ Replaces %R with RO
 ```
 
 ## Built by
-..* Usman Abdul Jabbar Shaikh
-..* Jose Cruz Ruiz
+- Usman Abdul Jabbar Shaikh
+- Jose Cruz Ruiz
