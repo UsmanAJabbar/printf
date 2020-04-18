@@ -1,6 +1,4 @@
 #include "holberton.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 /**
 * printf_r - prints a string in reverse, followed by a new line.
@@ -10,17 +8,16 @@
 
 int printf_r(va_list list)
 {
-	int count = 0;
-	int temp;
+	int len = 0, temp;
 	char *s = va_arg(list, char *);
 
-	while (s[count])
-		count++;
+	while (s[len])
+		len++;
 
-	temp = (count - 1);
+	temp = (len - 1);
 
-	while (count--)
-		_putchar(s[count]);
+	while (len--)
+		_putchar(s[len]);
 
 	return (temp);
 }
@@ -66,4 +63,31 @@ int printf_R(va_list list)
 	free(capture);
 	i--;
 	return (i); /* record and report back on the strlen */
+}
+
+/**
+ * printf_b - store number to print in binary
+ * @list: va_list
+ * Return: strlen
+ */
+int printf_b(va_list list)
+{
+	int n = va_arg(list, int);
+
+	return (print_bin(n));
+}
+
+/**
+ * print_bin - print number in binary recursively
+ * @n: number to print in binary
+ * Return: 1 + rest of calls to print whole num
+ **/
+int print_bin(int n)
+{
+	int strlen;
+
+	if (n > 1)
+		strlen = print_bin(n >> 1);
+	_putchar((n & 1) + '0');
+	return (1 + strlen);
 }

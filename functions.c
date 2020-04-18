@@ -1,10 +1,8 @@
 #include "holberton.h"
-#include <stdio.h>
+
 /**
  * printf_c - prints a character
- *
  * @list: imported argument list
- *
  * Return: 0
  */
 int printf_c(va_list list)
@@ -15,38 +13,21 @@ int printf_c(va_list list)
 
 /**
  * printf_str - prints a string
- *
  * @list: imported argument list
- *
  * Return: strlen
  */
-
 int printf_str(va_list list)
 {
-	int index; /* prints the numbers */
-	int count = -1; /* captures the strlen */
+	int len = -1;
 	char *str = va_arg(list, char *);
 
 	if (str == NULL)
-	{
-		_putchar('(');
-		_putchar('n');
-		_putchar('u');
-		_putchar('l');
-		_putchar('l');
-		_putchar(')');
-		count = 5;
-	}
+		len += write(1, "(null)", 6);
 	else
-	{
-		for (index = 0; str[index] != '\0'; index++)
-		{
-			_putchar(str[index]);
-			count++;
-		}
-	}
+		for (; *str; len++)
+			_putchar(*str++);
 
-	return (count);
+	return (len);
 }
 
 /**
@@ -54,12 +35,11 @@ int printf_str(va_list list)
  * @list: va_list
  * Return: strlen
  */
-
 int printf_i_d(va_list list)
 {
 	int temp;
 	int size = 1;
-	int count = -1;
+	int len = -1;
 	int n = va_arg(list, int);
 
 	/* check if its INT_MIN as edge case */
@@ -69,8 +49,8 @@ int printf_i_d(va_list list)
 		_putchar('2');
 		n = n % 1000000000;
 		n = -n;
-		count++;
-		count++;
+		len++;
+		len++;
 	}
 	/* if input is negative, postive it */
 	/* manually print the '-' sign */
@@ -78,7 +58,7 @@ int printf_i_d(va_list list)
 	{
 		_putchar('-');
 		n = -n;
-		count++;
+		len++;
 	}
 
 	temp = n;
@@ -94,7 +74,18 @@ int printf_i_d(va_list list)
 		temp = n / size;
 		_putchar(temp + '0');
 		n = n % size;
-		count++;
+		len++;
 	}
-	return (count);
+	return (len);
+}
+
+/**
+ * _putchar - writes the character c to stdout
+ * @c: The character to print
+ * Return: On success 1.
+ * On error, -1 is returned, and errno is set appropriately.
+ */
+int _putchar(char c)
+{
+	return (write(1, &c, 1));
 }
