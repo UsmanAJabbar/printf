@@ -1,0 +1,52 @@
+./" PRINTF manpage
+.TH .B _PRINTF "March 17th, 2020" "V0.1" "_PRINTF MAN PAGE"
+
+.SH NAME
+PRINTF
+
+.SH SYNOPSIS
+#include "holberton.h"
+_printf(const char *format, ...);
+
+.SH EXAMPLE
+.B _printf("There are %d degrees in a circle", angle)
+.I Where angle is a variable that contains 360 as an int value
+
+.SH NOTE
+This printf function requires the header file "holberton.h" to work.
+
+.SH DESCRIPTION
+This printf function is a custom program created by
+two students at Holberton School, Usman.A.Jabbar 
+and J.I Cruz as a part of the Holberton School
+curriculum.
+
+This _printf function uses performs most of the basic
+tasks of the original printf functions and can accept
+a number of format specifiers [see OPTIONS].
+
+.SH OPTIONS
+The following are the format specifiers that our
+printf function accepts and parses.
+
+.IP %s
+ - Parses and prints out strings.
+
+.IP %d
+ - Parses and prints out decimals.
+
+.IP %i
+ - Parses and prints out integers.
+
+.IP %r
+ - Parses and prints out reversed strings.
+
+.IP %R
+ - Parses and prints out strings in ROT13 format.
+
+.SH BUGS
+Only the checker can tell, we're just mere human beings.
+If the there are any errors, blame Jose! I didn't do it!
+
+.SH AUTHOR
+Usman.A.Jabbar | Jose Cruz Ruiz
