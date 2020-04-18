@@ -27,6 +27,5 @@ int printf_r(va_list);
 int printf_R(va_list);
 int printf_b(va_list);
 int print_bin(int n);
-int confirm_print(const char *);
 
 #endif

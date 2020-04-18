@@ -7,17 +7,20 @@
  */
 int _printf(const char *s, ...)
 {
-	int len = 0;
+	int len = -1;
 	va_list args;
 
 	va_start(args, s);
 
-	for (; *s; len++, s++)
-		if (*s == '%')
-			len += getprinter(*++s, args);
-		else
-			_putchar(*s);
-
+	if (s)
+		for (len = 0; *s; len++, s++)
+			if (*s == '%')
+				if (*++s)
+					len += getprinter(*s, args);
+				else
+					return (-1);
+			else
+				_putchar(*s);
 	va_end(args);
 	return (len);
 }
@@ -27,7 +30,7 @@ int _printf(const char *s, ...)
  * @c: character that represents the desired format specifier to find
  * @args: imported list of arguments from function that called getprinter
  * Return: 0 if match found, -1 if match not found
- */
+ **/
 int getprinter(char c, va_list args)
 {
 	int i = 0, j = 1;
@@ -44,26 +47,8 @@ int getprinter(char c, va_list args)
 	for (; i < 7; i++)
 		if (c == options[i].c)
 			return (options[i].f(args));
+
 	if (c != '%')
 		j -= _putchar('%');
 	return (_putchar(c) - j);
-}
-
-/**
- * confirm_print - identifies any unprintable format specifiers
- * @s: the string to check for unprintable specifiers
- * Return: -1 if error found, 0 if string is safe to print
- */
-int confirm_print(const char *s)
-{
-	int i = 0, j = 0, check = 0;
-	char *okays = "csdirRb%";
-
-	for (; s && s[i] && !check; i++)
-		if (s[i] == '%')
-			for (j = 0, i++, check++; okays[j] && check; j++)
-				if (okays[j] == s[i])
-					check--;
-
-	return (check);
 }
