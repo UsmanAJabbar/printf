@@ -74,7 +74,7 @@ int printf_b(va_list list)
 {
 	int n = va_arg(list, int);
 
-	return (print_bin(n));
+	return (print_bin(n) - 1);
 }
 
 /**
@@ -84,7 +84,7 @@ int printf_b(va_list list)
  **/
 int print_bin(int n)
 {
-	int strlen;
+	int strlen = 0;
 
 	if (n > 1)
 		strlen = print_bin(n >> 1);
