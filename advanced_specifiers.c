@@ -73,8 +73,24 @@ int printf_R(va_list list)
 int printf_b(va_list list)
 {
 	int n = va_arg(list, int);
+	int i = 0, count = 0, tmp = -1;
 
-	return (print_bin(n) - 1);
+	if (n < 0)
+	{
+		for (; tmp * 2 >= n; i++, tmp *= 2)
+			if (n == tmp * 2)
+			{
+				_putchar('1');
+				count++;
+			}
+
+		for (tmp = i; tmp < 30; tmp++)
+			_putchar('1');
+
+		count += 29 - i;
+	}
+
+	return (print_bin(n) + count);
 }
 
 /**
@@ -86,7 +102,7 @@ int print_bin(int n)
 {
 	int strlen = 0;
 
-	if (n > 1)
+	if (n != 1 && n != 0 && n != -1)
 		strlen = print_bin(n >> 1);
 	_putchar((n & 1) + '0');
 	return (1 + strlen);
