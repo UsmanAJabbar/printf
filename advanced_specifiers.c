@@ -88,7 +88,7 @@ int printf_b(va_list list)
 			_putchar('1');
 
 		print_bin(n);
-		return (30);
+		return (31);
 	}
 
 	return (print_bin(n) - 1);
