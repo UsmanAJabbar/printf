@@ -73,16 +73,15 @@ int printf_R(va_list list)
 int printf_b(va_list list)
 {
 	int n = va_arg(list, int);
-	int i = 0, count = 0, tmp = -1;
+	int i = 0, tmp = -1;
 
 	if (n < 0)
 	{
+		if (n == -1)
+			_putchar('1');
 		for (; tmp * 2 >= n; i++, tmp *= 2)
 			if (n == tmp * 2)
-			{
 				_putchar('1');
-				count++;
-			}
 
 		for (tmp = i; tmp < 30; tmp++)
 			_putchar('1');
