@@ -87,10 +87,11 @@ int printf_b(va_list list)
 		for (tmp = i; tmp < 30; tmp++)
 			_putchar('1');
 
-		count += 29 - i;
+		print_bin(n);
+		return (30);
 	}
 
-	return (print_bin(n) + count);
+	return (print_bin(n) - 1);
 }
 
 /**
