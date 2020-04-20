@@ -26,6 +26,7 @@ int printf_i_d(va_list);
 int printf_r(va_list);
 int printf_R(va_list);
 int printf_b(va_list);
+int printf_o(va_list);
 int print_bin(int n);
 
 #endif

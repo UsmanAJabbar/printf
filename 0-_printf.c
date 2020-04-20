@@ -42,9 +42,10 @@ int getprinter(char c, va_list args)
 		{'r', printf_r},
 		{'R', printf_R},
 		{'b', printf_b},
+		{'o', printf_o},
 	};
 
-	for (; i < 7; i++)
+	for (; i < 8; i++)
 		if (c == options[i].c)
 			return (options[i].f(args));
 
