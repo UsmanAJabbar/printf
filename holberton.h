@@ -11,22 +11,27 @@
  * @c: format specifier scanner
  * @f: function caller
  */
-typedef struct f_call
+typedef struct f_str
 {
 	char c;
 	int (*f)(va_list);
-} f_call;
+} f_str;
+
+typedef struct base_s
+{
+	char c;
+	int base;
+} base_t;
 
 int _printf(const char *format, ...);
 int _putchar(char c);
 int getprinter(char, va_list);
-int printf_c(va_list);
-int printf_str(va_list);
-int printf_i_d(va_list);
-int printf_r(va_list);
-int printf_R(va_list);
-int printf_b(va_list);
-int printf_o(va_list);
-int print_bin(int n);
+int p_c(va_list);
+int p_s(va_list);
+int p_r(va_list);
+int p_R(va_list);
+int p_num(char, int);
+int p_int(char, int);
+int p_b(int);
 
 #endif

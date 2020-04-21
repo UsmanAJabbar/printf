@@ -6,7 +6,7 @@
 * Return: temp
 */
 
-int printf_r(va_list list)
+int p_r(va_list list)
 {
 	int len = 0, temp;
 	char *s = va_arg(list, char *);
@@ -30,7 +30,7 @@ int printf_r(va_list list)
  * Return: Returns
  */
 
-int printf_R(va_list list)
+int p_R(va_list list)
 {
 	char *l33t = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
 	char *real = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -70,40 +70,26 @@ int printf_R(va_list list)
  * @list: va_list
  * Return: strlen
  */
-int printf_b(va_list list)
+/*int p_b(int n)
 {
-	int n = va_arg(list, int);
-	int i = 0, tmp = -1;
+	int i = 0, tmp = -1, strlen = 0;
 
 	if (n < 0)
 	{
 		if (n == -1)
-			_putchar('1');
+			strlen = _putchar('1');
 		for (; tmp * 2 >= n; i++, tmp *= 2)
 			if (n == tmp * 2)
-				_putchar('1');
+				strlen += _putchar('1');
 
 		for (tmp = i; tmp < 30; tmp++)
-			_putchar('1');
+			strlen += _putchar('1');
 
-		print_bin(n);
-		return (31);
+		n = -n;
 	}
 
-	return (print_bin(n) - 1);
-}
-
-/**
- * print_bin - print number in binary recursively
- * @n: number to print in binary
- * Return: 1 + rest of calls to print whole num
- **/
-int print_bin(int n)
-{
-	int strlen = 0;
-
 	if (n != 1 && n != 0 && n != -1)
-		strlen = print_bin(n >> 1);
-	_putchar((n & 1) + '0');
-	return (1 + strlen);
-}
+		strlen = p_b(n >> 1);
+
+	return (_putchar((n & 1) + '0') + strlen);
+}*/
