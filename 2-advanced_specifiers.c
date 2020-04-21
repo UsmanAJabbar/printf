@@ -71,7 +71,7 @@ int p_R(va_list list)
  */
 int p_num(char c, int n)
 {
-	int i, j, base = 0, hex = 0, len = 0;
+	int i, j, base = 0, hex = 0, len = -1;
 	base_s bases[] = {{'b', 1}, {'o', 3}, {'x', 4}, {'X', 4}};
 
 	if (c == 'd' || c == 'i' || c == 'u')
@@ -93,7 +93,6 @@ int p_num(char c, int n)
 		for (i = 0, j = -1; j * 2 >= n; i++, j *= 2)
 			if (n == j * 2)
 				len += _putchar('1');
-
 		for (j = i; j < 30; j++)
 			len += _putchar('1');
 
@@ -107,7 +106,9 @@ int p_num(char c, int n)
 		j += n & (1 << i);
 
 	if (j > 9)
-		return (_putchar(j + '0' + hex) + len);
+		len += _putchar(j + '0' + hex);
+	else
+		len += _putchar(j + '0');
 
-	return (_putchar(j + '0') + len);
+	return (len);
 }
