@@ -4,12 +4,12 @@
  * getprinter - matches a format specifier & calls its related function
  * @c: character that represents the desired format specifier to find
  * @args: imported list of arguments from function that called getprinter
- * Return: 0 if match found, -1 if match not found
+ * Return: strlen of whatever string was printed
  **/
 int getprinter(char c, va_list args)
 {
 	int i = 0, j = 1;
-	f_str strings[] = {{'c', p_c}, {'s', p_s}, {'r', p_r}, {'R', p_R}};
+	f_char strings[] = {{'c', p_c}, {'s', p_s}, {'r', p_r}, {'R', p_R}};
 	char *nums = "diuboxX";
 
 	for (; i < 4; i++)
@@ -26,8 +26,8 @@ int getprinter(char c, va_list args)
 }
 
 /**
- * printf_c - prints a character
- * @list: imported argument list
+ * p_c - prints a character
+ * @list: imported argument list containing char
  * Return: 0
  */
 int p_c(va_list list)
@@ -37,8 +37,8 @@ int p_c(va_list list)
 }
 
 /**
- * printf_str - prints a string
- * @list: imported argument list
+ * p_s - prints a string
+ * @list: imported argument list containing string
  * Return: strlen
  */
 int p_s(va_list list)
@@ -56,64 +56,15 @@ int p_s(va_list list)
 }
 
 /**
- * printf_num - prints numbers
- * @list: va_list
- * Return: strlen
- */
-int p_num(char c, int n)
-{
-	int i, j, base = 0, hex = 0, len = 0;
-	base_t bases[] = {{'b', 1}, {'o', 3}, {'x', 4}, {'X', 4}};
-
-	/*printf("\n\tn = %d", n);*/
-
-	if (c == 'd' || c == 'i' || c == 'u')
-		return (p_int(c, n));
-
-	for (i = 0; !base; i++)
-		if (bases[i].c == c)
-			base = bases[i].base;
-
-	if (c == 'x')
-		hex = 39;
-	if (c == 'X')
-		hex = 7;
-
-	if (n < 0 && c == 'b')
-	{
-		if (n == -1)
-			len = _putchar('1');
-		for (i = 0, j = -1; j * 2 >= n; i++, j *= 2)
-			if (n == j * 2)
-				len += _putchar('1');
-
-		for (j = i; j < 30; j++)
-			len += _putchar('1');
-
-		n = -n;
-	}
-
-	if (n != 1 && n != 0 && n != -1 && n >> base)
-		len = p_num(c, n >> base);
-
-	for (i = 0, j = 0; i < base; i++)
-		j += n & (1 << i);
-
-	if (j > 9)
-		return (_putchar(j + '0' + hex) + len);
-
-	return (_putchar(j + '0') + len);
-}
-
-/**
  * p_int - prints integers
- * @list: va_list
+ * @c: format specifier. determines behavior of function
+ * @n: integer to be printed
  * Return: strlen
  */
 int p_int(char c, int n)
 {
-	int temp;
-	int size = 1;
+	unsigned int temp;
+	unsigned int size = 1;
 	int len = -1;
 
 	/* check if its INT_MIN as edge case */
@@ -126,7 +77,7 @@ int p_int(char c, int n)
 		len++;
 		len++;
 	}
-	/* if input is negative, postive it */
+	/* if input is negative, positive it */
 	/* manually print the '-' sign */
 	if (n < 0 && c != 'u')
 	{

@@ -1,9 +1,9 @@
 #include "holberton.h"
 
 /**
-* printf_r - prints a string in reverse, followed by a new line.
-* @list: string to be printed
-* Return: temp
+* p_r - prints a string in reverse, followed by a new line.
+* @list: arguments list containing string to be printed
+* Return: strlen
 */
 
 int p_r(va_list list)
@@ -23,11 +23,9 @@ int p_r(va_list list)
 }
 
 /**
- * printf_R - replaces characters in rot13 format
- *
+ * p_R - replaces characters in rot13 format
  * @list: imported argument list
- *
- * Return: Returns
+ * Return: strlen
  */
 
 int p_R(va_list list)
@@ -66,30 +64,50 @@ int p_R(va_list list)
 }
 
 /**
- * printf_b - store number to print in binary
- * @list: va_list
+ * p_num - prints numbers
+ * @c: format specifier. determines behavior of function.
+ * @n: number to print.
  * Return: strlen
  */
-/*int p_b(int n)
+int p_num(char c, int n)
 {
-	int i = 0, tmp = -1, strlen = 0;
+	int i, j, base = 0, hex = 0, len = 0;
+	base_s bases[] = {{'b', 1}, {'o', 3}, {'x', 4}, {'X', 4}};
 
-	if (n < 0)
+	if (c == 'd' || c == 'i' || c == 'u')
+		return (p_int(c, n));
+
+	for (i = 0; !base; i++)
+		if (bases[i].c == c)
+			base = bases[i].base;
+
+	if (c == 'x')
+		hex = 39;
+	if (c == 'X')
+		hex = 7;
+
+	if (n < 0 && c == 'b')
 	{
 		if (n == -1)
-			strlen = _putchar('1');
-		for (; tmp * 2 >= n; i++, tmp *= 2)
-			if (n == tmp * 2)
-				strlen += _putchar('1');
+			len = _putchar('1');
+		for (i = 0, j = -1; j * 2 >= n; i++, j *= 2)
+			if (n == j * 2)
+				len += _putchar('1');
 
-		for (tmp = i; tmp < 30; tmp++)
-			strlen += _putchar('1');
+		for (j = i; j < 30; j++)
+			len += _putchar('1');
 
 		n = -n;
 	}
 
-	if (n != 1 && n != 0 && n != -1)
-		strlen = p_b(n >> 1);
+	if (n != 1 && n != 0 && n != -1 && n >> base)
+		len = p_num(c, n >> base);
 
-	return (_putchar((n & 1) + '0') + strlen);
-}*/
+	for (i = 0, j = 0; i < base; i++)
+		j += n & (1 << i);
+
+	if (j > 9)
+		return (_putchar(j + '0' + hex) + len);
+
+	return (_putchar(j + '0') + len);
+}

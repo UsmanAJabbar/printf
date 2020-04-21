@@ -7,21 +7,27 @@
 #include <stdio.h>
 
 /**
- * struct f_call - whateva
- * @c: format specifier scanner
- * @f: function caller
+ * struct f_char -	struct that pairs a char format specifier with its
+ *					corresponding printing function
+ * @c: format specifier
+ * @f: function called
  */
-typedef struct f_str
+typedef struct f_char
 {
 	char c;
 	int (*f)(va_list);
-} f_str;
+} f_char;
 
+/**
+ * struct base_s - struct that pairs an int format specifier with a base value
+ * @c: format specifier
+ * @base: base value associated with @c. determines function behavior
+ */
 typedef struct base_s
 {
 	char c;
 	int base;
-} base_t;
+} base_s;
 
 int _printf(const char *format, ...);
 int _putchar(char c);
