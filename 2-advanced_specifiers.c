@@ -64,51 +64,46 @@ int p_R(va_list list)
 }
 
 /**
+ * get_base - returns the base_s struct corresponding to c
+ * @c: character to be matched with a base_s struct
+ * Return: base_s struct
+ **/
+base_s get_base(char c)
+{
+	int i;
+	base_s bases[] = {{'b', 1, 0}, {'o', 3, 0}, {'x', 4, 39}, {'X', 4, 7}};
+
+	for (i = 0; bases[i].c != c; i++)
+		;
+
+	return (bases[i]);
+}
+
+/**
  * p_num - prints numbers
- * @c: format specifier. determines behavior of function.
+ * @vars: struct with variable values needed
  * @n: number to print.
  * Return: strlen
  */
-int p_num(char c, int n)
+int p_num(base_s vars, int n)
 {
-	int i, j, base = 0, hex = 0, len = -1;
-	base_s bases[] = {{'b', 1}, {'o', 3}, {'x', 4}, {'X', 4}};
+	int ck, tmp, print = 0, len = -1, bits = 32;
 
-	if (c == 'd' || c == 'i' || c == 'u')
-		return (p_int(c, n));
+	if (vars.c == 'd' || vars.c == 'i' || vars.c == 'u')
+		return (p_int(vars.c, n));
 
-	for (i = 0; !base; i++)
-		if (bases[i].c == c)
-			base = bases[i].base;
-
-	if (c == 'x')
-		hex = 39;
-	if (c == 'X')
-		hex = 7;
-
-	if (n < 0 && c == 'b')
+	while (bits)
 	{
-		if (n == -1)
-			len = _putchar('1');
-		for (i = 0, j = -1; j * 2 >= n; i++, j *= 2)
-			if (n == j * 2)
-				len += _putchar('1');
-		for (j = i; j < 30; j++)
-			len += _putchar('1');
+		for (tmp = 0, ck = 1; ck; ck = bits % vars.exp)
+			tmp = (tmp << 1) + ((n >> --bits) & 1);
 
-		n = -n;
+		if (!print)
+			print = tmp & 15;
+
+		if (tmp > 9 && print)
+			len += _putchar(tmp + '0' + vars.hex);
+		else if (print)
+			len += _putchar(tmp + '0');
 	}
-
-	if (n != 1 && n != 0 && n != -1 && n >> base)
-		len = p_num(c, n >> base);
-
-	for (i = 0, j = 0; i < base; i++)
-		j += n & (1 << i);
-
-	if (j > 9)
-		len += _putchar(j + '0' + hex);
-	else
-		len += _putchar(j + '0');
-
 	return (len);
 }

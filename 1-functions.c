@@ -18,7 +18,7 @@ int getprinter(char c, va_list args)
 
 	for (i = 0; nums[i]; i++)
 		if (nums[i] == c)
-			return (p_num(c, va_arg(args, int)));
+			return (p_num(get_base(c), va_arg(args, int)));
 
 	if (c != '%')
 		j -= _putchar('%');

@@ -21,12 +21,14 @@ typedef struct f_char
 /**
  * struct base_s - struct that pairs an int format specifier with a base value
  * @c: format specifier
- * @base: base value associated with @c. determines function behavior
+ * @exp: exp value associated with @c. determines function behavior
+ * @hex: assists in printing characters for hexadecimal base. 0 for other bases
  */
 typedef struct base_s
 {
 	char c;
-	int base;
+	int exp;
+	int hex;
 } base_s;
 
 int _printf(const char *format, ...);
@@ -36,8 +38,9 @@ int p_c(va_list);
 int p_s(va_list);
 int p_r(va_list);
 int p_R(va_list);
-int p_num(char, int);
+int p_num(base_s, int);
 int p_int(char, int);
 int p_b(int);
+base_s get_base(char);
 
 #endif
