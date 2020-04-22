@@ -43,18 +43,18 @@ int p_R(va_list list)
 	if (capture == NULL)
 		exit(1);
 
-	for (i = 0; str[i] != '\0'; i++) /* while input != NULL char */
+	for (i = 0; str[i] != '\0'; i++)
 	{
-		for (j = 0; j < 95; j++) /* 52 = chars in l33t */
+		for (j = 0; j < 95; j++)
 		{
 			if (str[i] == real[j])
 			{
 				if (str[i] == real[j])
 					capture[i] = l33t[j];
 				else
-					capture[i] = symbols[j]; /* if found copy l33t[j] into capture[i] */
+					capture[i] = symbols[j];
 				_putchar(capture[i]);
-				break; /* match found! break loop go back to i loop */
+				break;
 			}
 		}
 	}
@@ -105,5 +105,7 @@ int p_num(base_s vars, int n)
 		else if (print)
 			len += _putchar(tmp + '0');
 	}
+	if (len == -1)
+		len += _putchar(tmp + '0');
 	return (len);
 }
