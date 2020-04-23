@@ -138,6 +138,9 @@ int p_p(va_list list)
 	long int n = va_arg(list, long int);
 	f_num num_vars = {'p', 4, 39};
 
+	if (!n)
+		return (write(1, "(nil)", 5) - 1);
+
 	_putchar('0');
 	_putchar('x');
 	return (2 + p_num(num_vars, n));
