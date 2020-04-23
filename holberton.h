@@ -34,14 +34,14 @@ typedef struct f_num
 
 int _printf(const char *format, ...);
 int _putchar(char c);
-int getprinter(char, va_list);
+int getprinter(const char **, va_list);
 int p_c(va_list);
 int p_s(va_list);
 int p_r(va_list);
 int p_R(va_list);
 int p_S(va_list);
 int p_p(va_list);
-int p_num(f_num, unsigned long int);
-int p_int(char, unsigned int);
+int p_num(f_num, unsigned long int, int);
+int p_int(char, unsigned int, int);
 
 #endif

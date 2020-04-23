@@ -5,7 +5,7 @@
 *		non-printable chars are printed as \x$ASCIIVALUE
 * @list: arguments list containing string to be printed
 * Return: strlen
-*/
+**/
 
 int p_S(va_list list)
 {
@@ -28,7 +28,7 @@ int p_S(va_list list)
 			{
 				_putchar('\\');
 				len += _putchar('x');
-				len += 1 + p_num(num_vars, (int)(*str));
+				len += 1 + p_num(num_vars, (int)(*str), 1);
 			}
 		}
 	return (len);
@@ -38,8 +38,7 @@ int p_S(va_list list)
 * p_r - prints a string in reverse, followed by a new line.
 * @list: arguments list containing string to be printed
 * Return: strlen
-*/
-
+**/
 int p_r(va_list list)
 {
 	int len = 0, temp;
@@ -101,13 +100,14 @@ int p_R(va_list list)
  * p_num - prints numbers
  * @vars: struct with variable values needed
  * @n: number to print.
+ * @l: determines if number is printed as a long or not
  * Return: strlen
  */
-int p_num(f_num vars, unsigned long int n)
+int p_num(f_num vars, unsigned long int n, int l)
 {
 	int ck, tmp, print = 0, len = -1, bits = 32;
 
-	if (vars.c == 'p')
+	if (l)
 		bits *= 2;
 
 	while (bits)
@@ -143,5 +143,5 @@ int p_p(va_list list)
 
 	_putchar('0');
 	_putchar('x');
-	return (2 + p_num(num_vars, n));
+	return (2 + p_num(num_vars, n, 1));
 }

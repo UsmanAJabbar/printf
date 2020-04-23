@@ -16,7 +16,7 @@ int _printf(const char *s, ...)
 		for (len = 0; *s; len++, s++)
 			if (*s == '%')
 				if (*++s)
-					len += getprinter(*s, args);
+					len += getprinter(&s, args);
 				else
 					return (-1);
 			else

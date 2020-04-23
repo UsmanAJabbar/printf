@@ -17,9 +17,9 @@ int _putchar(char c)
  * @args: imported list of arguments from function that called getprinter
  * Return: strlen of whatever string was printed
  **/
-int getprinter(char c, va_list args)
+int getprinter(const char **c, va_list args)
 {
-	int i = 0, j = 1;
+	int i = 0, j = 1, l = 0;
 	f_str str[] = {
 		{'c', p_c},
 		{'s', p_s},
@@ -30,20 +30,23 @@ int getprinter(char c, va_list args)
 	};
 	f_num num[] = {{'b', 1, 0}, {'o', 3, 0}, {'x', 4, 39}, {'X', 4, 7}};
 
-	if (c == 'u' || c == 'd' || c == 'i')
-		return (p_int(c, va_arg(args, int)));
-
 	for (; i < 6; i++)
-		if (c == str[i].c)
+		if (**c == str[i].c)
 			return (str[i].f(args));
 
-	for (i = 0; i < 4; i++)
-		if (c == num[i].c)
-			return (p_num(num[i], va_arg(args, int)));
+	if (**c == 'l')
+		l++, (*c)++;
 
-	if (c != '%')
+	if (**c == 'u' || **c == 'd' || **c == 'i')
+		return (p_int(**c, va_arg(args, unsigned int), l));
+
+	for (i = 0; i < 4; i++)
+		if (**c == num[i].c)
+			return (p_num(num[i], va_arg(args, unsigned long int), l));
+
+	if (**c != '%')
 		j -= _putchar('%');
-	return (_putchar(c) - j);
+	return (_putchar(**c) - j);
 }
 
 /**
@@ -80,21 +83,25 @@ int p_s(va_list list)
  * p_int - prints integers
  * @c: format specifier. determines behavior of function
  * @n: integer to be printed
+ * @l: to be used for long number logic
  * Return: strlen
  */
-int p_int(char c, unsigned int n)
+int p_int(char c, unsigned int n, int l)
 {
-	int len = -1;
+	int neg = 0;
 	unsigned int last_pos = INT_MAX;
+
+	if (l)
+		return (-1);
 
 	if (n > last_pos && c != 'u')
 	{
-		len += _putchar('-');
+		neg += _putchar('-');
 		n = -n;
 	}
 
 	if (n > 9)
-		return (p_int(c, n / 10) + _putchar('0' + n % 10));
+		return (neg + p_int(c, n / 10, l) + _putchar('0' + n % 10));
 
-	return (len + _putchar(n + '0'));
+	return (neg + _putchar(n + '0') - 1);
 }
