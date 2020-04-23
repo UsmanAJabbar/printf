@@ -5,31 +5,32 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <limits.h>
 
 /**
- * struct f_char -	struct that pairs a char format specifier with its
+ * struct f_str -	struct that pairs a char format specifier with its
  *					corresponding printing function
  * @c: format specifier
  * @f: function called
  */
-typedef struct f_char
+typedef struct f_str
 {
 	char c;
 	int (*f)(va_list);
-} f_char;
+} f_str;
 
 /**
- * struct base_s - struct that pairs an int format specifier with a base value
+ * struct f_num - struct that pairs an int format specifier with a base value
  * @c: format specifier
  * @exp: exp value associated with @c. determines function behavior
  * @hex: assists in printing characters for hexadecimal base. 0 for other bases
  */
-typedef struct base_s
+typedef struct f_num
 {
 	char c;
 	int exp;
 	int hex;
-} base_s;
+} f_num;
 
 int _printf(const char *format, ...);
 int _putchar(char c);
@@ -38,9 +39,9 @@ int p_c(va_list);
 int p_s(va_list);
 int p_r(va_list);
 int p_R(va_list);
-int p_num(base_s, int);
-int p_int(char, int);
-int p_b(int);
-base_s get_base(char);
+int p_S(va_list);
+int p_p(va_list);
+int p_num(f_num, unsigned long int);
+int p_int(char, unsigned int);
 
 #endif

@@ -1,6 +1,40 @@
 #include "holberton.h"
 
 /**
+* p_S - prints ONLY characters in a string.
+*		non-printable chars are printed as \x$ASCIIVALUE
+* @list: arguments list containing string to be printed
+* Return: strlen
+*/
+
+int p_S(va_list list)
+{
+	int len = -1;
+	char *str = va_arg(list, char *);
+	f_num num_vars = {'S', 4, 7};
+
+	printf("printing S!\n");
+
+	if (str == NULL)
+		len += write(1, "(null)", 6);
+	else
+		for (; *str; len++, str++)
+		{
+			if (*str > 31 && *str < 127)
+			{
+				_putchar(*str);
+			}
+			else
+			{
+				_putchar('\\');
+				len += _putchar('x');
+				len += 1 + p_num(num_vars, (int)(*str));
+			}
+		}
+	return (len);
+}
+
+/**
 * p_r - prints a string in reverse, followed by a new line.
 * @list: arguments list containing string to be printed
 * Return: strlen
@@ -64,33 +98,17 @@ int p_R(va_list list)
 }
 
 /**
- * get_base - returns the base_s struct corresponding to c
- * @c: character to be matched with a base_s struct
- * Return: base_s struct
- **/
-base_s get_base(char c)
-{
-	int i;
-	base_s bases[] = {{'b', 1, 0}, {'o', 3, 0}, {'x', 4, 39}, {'X', 4, 7}};
-
-	for (i = 0; bases[i].c != c; i++)
-		;
-
-	return (bases[i]);
-}
-
-/**
  * p_num - prints numbers
  * @vars: struct with variable values needed
  * @n: number to print.
  * Return: strlen
  */
-int p_num(base_s vars, int n)
+int p_num(f_num vars, unsigned long int n)
 {
 	int ck, tmp, print = 0, len = -1, bits = 32;
 
-	if (vars.c == 'd' || vars.c == 'i' || vars.c == 'u')
-		return (p_int(vars.c, n));
+	if (vars.c == 'p')
+		bits *= 2;
 
 	while (bits)
 	{
@@ -108,4 +126,19 @@ int p_num(base_s vars, int n)
 	if (len == -1)
 		len += _putchar(tmp + '0');
 	return (len);
+}
+
+/**
+ * p_p - print a datum's address
+ * @list: imported arguments list
+ * Return: strlen
+ **/
+int p_p(va_list list)
+{
+	long int n = va_arg(list, long int);
+	f_num num_vars = {'p', 4, 39};
+
+	_putchar('0');
+	_putchar('x');
+	return (2 + p_num(num_vars, n));
 }
