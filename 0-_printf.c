@@ -12,15 +12,14 @@ int _printf(const char *s, ...)
 
 	va_start(args, s);
 
-	if (s)
-		for (len = 0; *s; len++, s++)
-			if (*s == '%')
-				if (*++s)
-					len += getprinter(&s, args);
-				else
-					return (-1);
+	for (len = 0; s && *s; len++, s++)
+		if (*s == '%')
+			if (*++s)
+				len += getprinter(&s, args);
 			else
-				_putchar(*s);
+				return (-1);
+		else
+			_putchar(*s);
 	va_end(args);
 	return (len);
 }

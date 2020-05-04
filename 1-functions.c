@@ -38,7 +38,12 @@ int getprinter(const char **c, va_list args)
 		l++, (*c)++;
 
 	if (**c == 'u' || **c == 'd' || **c == 'i')
-		return (p_int(**c, va_arg(args, unsigned int), l));
+	{
+		if (*(*c - 1) == 'l')
+			return (p_long(**c, va_arg(args, unsigned long int)));
+		else
+			return (p_int(**c, va_arg(args, unsigned int)));
+	}
 
 	for (i = 0; i < 4; i++)
 		if (**c == num[i].c)
@@ -83,16 +88,12 @@ int p_s(va_list list)
  * p_int - prints integers
  * @c: format specifier. determines behavior of function
  * @n: integer to be printed
- * @l: to be used for long number logic
  * Return: strlen
  */
-int p_int(char c, unsigned int n, int l)
+int p_int(char c, unsigned int n)
 {
 	int neg = 0;
 	unsigned int last_pos = INT_MAX;
-
-	if (l)
-		return (-1);
 
 	if (n > last_pos && c != 'u')
 	{
@@ -101,7 +102,7 @@ int p_int(char c, unsigned int n, int l)
 	}
 
 	if (n > 9)
-		return (neg + p_int(c, n / 10, l) + _putchar('0' + n % 10));
+		return (neg + p_int(c, n / 10) + _putchar('0' + n % 10));
 
 	return (neg + _putchar(n + '0') - 1);
 }

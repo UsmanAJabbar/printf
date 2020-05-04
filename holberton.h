@@ -42,6 +42,7 @@ int p_R(va_list);
 int p_S(va_list);
 int p_p(va_list);
 int p_num(f_num, unsigned long int, int);
-int p_int(char, unsigned int, int);
+int p_int(char, unsigned int);
+int p_long(char, unsigned long int);
 
 #endif
