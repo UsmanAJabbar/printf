@@ -1,147 +1,109 @@
 #include "holberton.h"
-
 /**
-* p_S - prints ONLY characters in a string.
-*		non-printable chars are printed as \x$ASCIIVALUE
-* @list: arguments list containing string to be printed
-* Return: strlen
-**/
-
-int p_S(va_list list)
-{
-	int len = -1;
-	char *str = va_arg(list, char *);
-	f_num num_vars = {'S', 4, 7};
-
-	printf("printing S!\n");
-
-	if (str == NULL)
-		len += write(1, "(null)", 6);
-	else
-		for (; *str; len++, str++)
-		{
-			if (*str > 31 && *str < 127)
-			{
-				_putchar(*str);
-			}
-			else
-			{
-				_putchar('\\');
-				len += _putchar('x');
-				len += 1 + p_num(num_vars, (int)(*str), 1);
-			}
-		}
-	return (len);
-}
-
-/**
-* p_r - prints a string in reverse, followed by a new line.
-* @list: arguments list containing string to be printed
-* Return: strlen
-**/
-int p_r(va_list list)
-{
-	int len = 0, temp;
-	char *s = va_arg(list, char *);
-
-	while (s[len])
-		len++;
-
-	temp = (len - 1);
-
-	while (len--)
-		_putchar(s[len]);
-
-	return (temp);
-}
-
-/**
- * p_R - replaces characters in rot13 format
- * @list: imported argument list
- * Return: strlen
+ * format_numconfig - returns a numconfig struct
+ * @c: format specifier to match with numconfig struct
+ * Return: num_t struct
  */
-
-int p_R(va_list list)
+num_t *format_numconfig(char c)
 {
-	char *l33t = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
-	char *real = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	num_t *num = NULL;
+	num_t nums[] = {
+		{'b', 1, 0},
+		{'o', 3, 0},
+		{'x', 4, 39},
+		{'X', 4, 7},
+		{'p', 4, 39},
+	};
 	int i;
-	char *symbols = " !.,<>/?;:[{]}`~@#$%^&*()-_=+'1234567890\"\\";
-	int j;
-	char *str = va_arg(list, char *);
-	char *capture;
 
-	capture = malloc(512);
+	for (i = 0; i < 5; i++)
+		if (nums[i].spec == c)
+			num = &nums[i];
 
-	if (capture == NULL)
-		exit(1);
-
-	for (i = 0; str[i] != '\0'; i++)
-	{
-		for (j = 0; j < 95; j++)
-		{
-			if (str[i] == real[j])
-			{
-				if (str[i] == real[j])
-					capture[i] = l33t[j];
-				else
-					capture[i] = symbols[j];
-				_putchar(capture[i]);
-				break;
-			}
-		}
-	}
-	free(capture);
-	i--;
-	return (i); /* record and report back on the strlen */
+	return (num);
 }
-
 /**
- * p_num - prints numbers
- * @vars: struct with variable values needed
- * @n: number to print.
- * @l: determines if number is printed as a long or not
- * Return: strlen
+ * p_num - prints numbers, addresses, and single chars
+ * @config: config struct with algorithm configurations
+ * Return: formatted str
  */
-int p_num(f_num vars, unsigned long int n, int l)
+char *p_num(config_t config)
 {
-	int ck, tmp, print = 0, len = -1, bits = 32;
+	num_t *num = format_numconfig(config.spec);
+	unsigned long int n = config.arg;
+	int i, ck, print = 0, bits = 32;
+	char buf[1024], *p = buf;
 
-	if (l)
+	if (num == NULL)
+		return (p_uidc(config));
+
+	for (i = 0; i < 1024; i++)
+		buf[i] = 0;
+
+	if (config.spec == 'p')
+	{
+		*p++ = '0';
+		*p++ = 'x';
+	}
+
+	if (config.longint || config.spec == 'p')
 		bits *= 2;
 
 	while (bits)
 	{
-		for (tmp = 0, ck = 1; ck; ck = bits % vars.exp)
-			tmp = (tmp << 1) + ((n >> --bits) & 1);
-
+		for (i = 0, ck = 1; ck; ck = bits % num->power)
+			i = (i << 1) + ((n >> --bits) & 1);
+		if (i > 9)
+			i += num->hex_char;
 		if (!print)
-			print = tmp & 15;
-
-		if (tmp > 9 && print)
-			len += _putchar(tmp + '0' + vars.hex);
-		else if (print)
-			len += _putchar(tmp + '0');
+			print = (i & 15);
+		if (print)
+			*p++ = i + '0';
 	}
-	if (len == -1)
-		len += _putchar(tmp + '0');
-	return (len);
+
+	if (n == 0)
+		*p = i + '0';
+
+	p = buf;
+
+	return (p);
 }
 
 /**
- * p_p - print a datum's address
- * @list: imported arguments list
- * Return: strlen
- **/
-int p_p(va_list list)
+ * p_uidc - prints chars and base-10 integers
+ * @config: config struct with algorithm configurations
+ * Return: formatted str
+ */
+char *p_uidc(config_t config)
 {
-	long int n = va_arg(list, long int);
-	f_num num_vars = {'p', 4, 39};
+	unsigned long int n = config.arg, max = INT_MAX, i, size = 1;
+	char spec = config.spec, buf[1024], *p = buf;
 
-	if (!n)
-		return (write(1, "(nil)", 5) - 1);
+	for (i = 0; i < 1024; i++)
+		buf[i] = 0;
 
-	_putchar('0');
-	_putchar('x');
-	return (2 + p_num(num_vars, n, 1));
+	if (spec == 'c')
+	{
+		*p = n;
+		return (p);
+	}
+
+	if (spec == 'u')
+		max = UINT_MAX;
+
+	if (n > max)
+	{
+		*p++ = '-';
+		n = ~(n - 1) & UINT_MAX;
+	}
+	for (i = n; i / 10; i /= 10)
+		size *= 10;
+
+	for (i = n; i / 10; i %= size, size /= 10, p++)
+		*p = (i / size) + '0';
+
+	*p = n % 10 + '0';
+	p = buf;
+
+	return (p);
 }

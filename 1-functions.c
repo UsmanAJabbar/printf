@@ -1,108 +1,114 @@
 #include "holberton.h"
-
-/**
- * _putchar - writes the character c to stdout
- * @c: The character to print
- * Return: On success 1.
- * On error, -1 is returned, and errno is set appropriately.
- */
-int _putchar(char c)
-{
-	return (write(1, &c, 1));
-}
+#define ITS_A_DIGIT (***c >= '0' && ***c <= '9')
 
 /**
  * getprinter - matches a format specifier & calls its related function
- * @c: character that represents the desired format specifier to find
- * @args: imported list of arguments from function that called getprinter
+ * @in: pointer to input string
+ * @out: pointer to out buffer
+ * @list: imported list of arguments from function that called getprinter
  * Return: strlen of whatever string was printed
  **/
-int getprinter(const char **c, va_list args)
+void getprinter(const char **in, char **out, va_list list)
 {
-	int i = 0, j = 1, l = 0;
-	f_str str[] = {
-		{'c', p_c},
-		{'s', p_s},
-		{'r', p_r},
-		{'R', p_R},
-		{'S', p_S},
-		{'p', p_p},
-	};
-	f_num num[] = {{'b', 1, 0}, {'o', 3, 0}, {'x', 4, 39}, {'X', 4, 7}};
+	int i = 0;
+	char *specs = "cboxXdiup", *str;
+	config_t config = format_config(&in);
 
-	for (; i < 6; i++)
-		if (**c == str[i].c)
-			return (str[i].f(args));
+	for (i = 0; specs[i]; i++)
+		if (specs[i] == **in)
+		{
+			config.arg = va_arg(list, unsigned long int);
+			for (str = p_num(config); *str; (*out)++)
+			{
+				**out = *str;
+				if (*(++str) == '\0')
+					break;
+			}
+			return;
+		}
 
-	if (**c == 'l')
-		l++, (*c)++;
-
-	if (**c == 'u' || **c == 'd' || **c == 'i')
+	if (**in == 's')
 	{
-		if (*(*c - 1) == 'l')
-			return (p_long(**c, va_arg(args, unsigned long int)));
-		else
-			return (p_int(**c, va_arg(args, unsigned int)));
+		config.str = va_arg(list, char *);
+		for (str = p_s(config); *str; (*out)++)
+		{
+			**out = *str;
+			if (*(++str) == '\0')
+				break;
+		}
+		return;
 	}
 
-	for (i = 0; i < 4; i++)
-		if (**c == num[i].c)
-			return (p_num(num[i], va_arg(args, unsigned long int), l));
-
-	if (**c != '%')
-		j -= _putchar('%');
-	return (_putchar(**c) - j);
+	**out = '%';
+	if (**in != '%')
+	{
+		(*out)++;
+		**out = **in;
+	}
 }
 
 /**
- * p_c - prints a character
- * @list: imported argument list containing char
- * Return: 0
- */
-int p_c(va_list list)
+ * format_config - creates & returns config for format printer
+ * @in: pointer to input string
+ * Return: a filled out config struct
+ **/
+config_t format_config(const char ***in)
 {
-	_putchar(va_arg(list, int));
-	return (0);
+	config_t config = {0};
+
+	for (; 1; (**in)++)
+		if (***in == '-')
+			config.minus = true;
+		else if (***in == '+')
+			config.plus = true;
+		else if (***in == ' ')
+			config.space = true;
+		else if (***in == '0')
+			config.zero = true;
+		else if (***in == '#')
+			config.hash = true;
+		else
+			break;
+
+	for (; ITS_A_DIGIT; (**in)++)
+		config.width = (config.width * 10) + (***in - '0');
+
+	if (***in == '.')
+		for ((**in)++; ITS_A_DIGIT; (**in)++)
+			config.precision = (config.precision * 10) + (***in - '0');
+
+	if (***in == 'l')
+	{
+		config.longint = true;
+		(**in)++;
+	}
+	else if (***in == 'h')
+	{
+		config.shortint = true;
+		(**in)++;
+	}
+
+	config.spec = ***in;
+
+	return (config);
 }
 
 /**
  * p_s - prints a string
- * @list: imported argument list containing string
- * Return: strlen
- */
-int p_s(va_list list)
+ * @settings: void
+ * Return: formatted string
+ **/
+char *p_s(config_t settings)
 {
-	int len = -1;
-	char *str = va_arg(list, char *);
+	char *str = config.str, *p = "(null)";
+	size_t len = _strlen(str);
+	int i = 0;
 
-	if (str == NULL)
-		len += write(1, "(null)", 6);
-	else
-		for (; *str; len++)
-			_putchar(*str++);
+	(void)settings;
 
-	return (len);
-}
+	if (str)
+		for (p = malloc(len); str[i]; i++)
+			p[i] = str[i];
 
-/**
- * p_int - prints integers
- * @c: format specifier. determines behavior of function
- * @n: integer to be printed
- * Return: strlen
- */
-int p_int(char c, unsigned int n)
-{
-	int neg = 0;
-	unsigned int last_pos = INT_MAX;
-
-	if (n > last_pos && c != 'u')
-	{
-		neg += _putchar('-');
-		n = -n;
-	}
-
-	if (n > 9)
-		return (neg + p_int(c, n / 10) + _putchar('0' + n % 10));
-
-	return (neg + _putchar(n + '0') - 1);
+	return (p);
 }

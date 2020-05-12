@@ -1,25 +1,49 @@
 #include "holberton.h"
-
+#define MEM_BLOCK 1024
 /**
  * _printf- acts a printf function
- * @s: string to be printed
+ * @in: string to be printed
  * Return: string length or -1 if failed
  */
-int _printf(const char *s, ...)
+int _printf(const char *in, ...)
 {
-	int len = -1;
 	va_list args;
+	char out[MEM_BLOCK], *p;
+	int i;
 
-	va_start(args, s);
+	if (in == NULL)
+		return (-1);
 
-	for (len = 0; s && *s; len++, s++)
-		if (*s == '%')
-			if (*++s)
-				len += getprinter(&s, args);
+	for (i = 0; i < MEM_BLOCK; i++)
+		out[i] = 0;
+
+	va_start(args, in);
+
+	for (p = out; *in; in++, p++)
+		if (*in == '%')
+			if (*(++in))
+				getprinter(&in, &p, args);
 			else
 				return (-1);
 		else
-			_putchar(*s);
+			*p = *in;
+
 	va_end(args);
+
+	return (write(1, out, _strlen(out)));
+}
+
+/**
+ * _strlen - length of string
+ * @s: string
+ * Return: length
+ **/
+size_t _strlen(char *s)
+{
+	size_t len = 0;
+
+	while (s && *s)
+		len++, s++;
+
 	return (len);
 }
