@@ -1,5 +1,5 @@
 #include "holberton.h"
-#define ITS_A_DIGIT (***c >= '0' && ***c <= '9')
+#define ITS_A_DIGIT (***in >= '0' && ***in <= '9')
 
 /**
  * getprinter - matches a format specifier & calls its related function
@@ -98,13 +98,11 @@ config_t format_config(const char ***in)
  * @settings: void
  * Return: formatted string
  **/
-char *p_s(config_t settings)
+char *p_s(config_t config)
 {
 	char *str = config.str, *p = "(null)";
 	size_t len = _strlen(str);
 	int i = 0;
-
-	(void)settings;
 
 	if (str)
 		for (p = malloc(len); str[i]; i++)
