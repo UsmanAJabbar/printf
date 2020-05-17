@@ -95,7 +95,7 @@ config_t format_config(const char ***in)
 
 /**
  * p_s - prints a string
- * @settings: void
+ * @config: void
  * Return: formatted string
  **/
 char *p_s(config_t config)

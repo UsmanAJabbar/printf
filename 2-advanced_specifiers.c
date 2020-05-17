@@ -76,10 +76,10 @@ char *p_num(config_t config)
  */
 char *p_uidc(config_t config)
 {
-	unsigned long int n = config.arg, max = INT_MAX, i, size = 1;
-	char spec = config.spec, buf[1024], *p = buf;
+	unsigned long int n = config.arg, max = INT_MAX, i, size = 1, print;
+	char spec = config.spec, buf[20], *p = buf;
 
-	for (i = 0; i < 1024; i++)
+	for (i = 0; i < 20; i++)
 		buf[i] = 0;
 
 	if (spec == 'c')
@@ -91,19 +91,29 @@ char *p_uidc(config_t config)
 	if (spec == 'u')
 		max = UINT_MAX;
 
-	if (n > max)
+	if (n > max && config.longint == 0)
 	{
-		*p++ = '-';
-		n = ~(n - 1) & UINT_MAX;
+		if (spec == 'u')
+		{
+			n -= UINT_MAX;
+			n -= 1;
+		}
+		else
+		{
+			*p++ = '-';
+			n = ~(n - 1) & UINT_MAX;
+		}
 	}
-	for (i = n; i / 10; i /= 10)
-		size *= 10;
 
-	for (i = n; i / 10; i %= size, size /= 10, p++)
-		*p = (i / size) + '0';
+	for (i = n, print = 0, size = 1000000000000000000; size; size /= 10)
+	{
+		if (i / size == 0 && print == 0)
+			continue;
+		print = 1;
+		*(p++) = (i / size) + '0';
+		i %= size;
+	}
 
-	*p = n % 10 + '0';
 	p = buf;
-
 	return (p);
 }
