@@ -1,5 +1,5 @@
 #include "holberton.h"
-#define MEM_BLOCK 1024
+#define MEM_BLOCK 2048
 /**
  * _printf- acts a printf function
  * @in: string to be printed
