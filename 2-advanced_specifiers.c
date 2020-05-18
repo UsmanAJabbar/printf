@@ -117,6 +117,7 @@ char *p_uidc(format f)
  * get_max - get max value
  * @spec: format specifier
  * @len: format length type
+ * Return: max value
  **/
 unsigned long int get_max(int spec, int len)
 {
