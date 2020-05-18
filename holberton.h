@@ -24,8 +24,7 @@ typedef struct num_s
 /**
  * struct config_s - struct that stores print format configuration settings
  * @spec: format specifier code
- * @longint: if 1, print arg as a long int
- * @shortint: if 1, print arg as a short int
+ * @len: if 1, print arg as a long int
  * @minus: if 1, print arg right-aligned
  * @plus: if 1, print the '+' sign before a number arg
  * @space: if 1, print placeholder chars with spaces
@@ -38,9 +37,8 @@ typedef struct num_s
  */
 typedef struct config_s
 {
-	char spec;
-	int longint;
-	int shortint;
+	int spec;
+	int len;
 	int minus;
 	int plus;
 	int space;
@@ -50,16 +48,17 @@ typedef struct config_s
 	int precision;
 	char *str;
 	unsigned long int arg;
-} config_t;
+} format;
 
 int _printf(const char *format, ...);
 void getprinter(const char **, char **, va_list);
-config_t format_config(const char ***c);
-num_t *format_numconfig(char c);
-char *p_c(config_t settings, va_list list);
-char *p_s(config_t);
-char *p_num(config_t);
-char *p_uidc(config_t config);
+format format_config(const char **);
+num_t *num_config(char c);
+char *p_c(format settings, va_list list);
+char *p_s(format);
+char *p_num(format);
+char *p_uidc(format);
 size_t _strlen(char *s);
+unsigned long int get_max(int spec, int len);
 
 #endif

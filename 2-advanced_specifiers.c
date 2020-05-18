@@ -1,10 +1,10 @@
 #include "holberton.h"
 /**
- * format_numconfig - returns a numconfig struct
+ * num_config - returns a numconfig struct
  * @c: format specifier to match with numconfig struct
  * Return: num_t struct
  */
-num_t *format_numconfig(char c)
+num_t *num_config(char c)
 {
 	num_t *num = NULL;
 	num_t nums[] = {
@@ -24,30 +24,31 @@ num_t *format_numconfig(char c)
 }
 /**
  * p_num - prints numbers, addresses, and single chars
- * @config: config struct with algorithm configurations
+ * @f: config struct with algorithm configurations
  * Return: formatted str
  */
-char *p_num(config_t config)
+char *p_num(format f)
 {
-	num_t *num = format_numconfig(config.spec);
-	unsigned long int n = config.arg;
+	num_t *num = num_config(f.spec);
+	unsigned long int n = f.arg;
 	int i, ck, print = 0, bits = 32;
-	char buf[1024], *p = buf;
+	char buf[65], *p = buf;
 
 	if (num == NULL)
-		return (p_uidc(config));
+		return (p_uidc(f));
 
-	for (i = 0; i < 1024; i++)
+	for (i = 0; i < 65; i++)
 		buf[i] = 0;
 
-	if (config.spec == 'p')
+	if (f.spec == 'p')
 	{
 		*p++ = '0';
 		*p++ = 'x';
+		bits = 64;
 	}
 
-	if (config.longint || config.spec == 'p')
-		bits *= 2;
+	if (f.len == 1)
+		bits = 64;
 
 	while (bits)
 	{
@@ -71,49 +72,70 @@ char *p_num(config_t config)
 
 /**
  * p_uidc - prints chars and base-10 integers
- * @config: config struct with algorithm configurations
+ * @f: config struct with algorithm configurations
  * Return: formatted str
  */
-char *p_uidc(config_t config)
+char *p_uidc(format f)
 {
-	unsigned long int n = config.arg, max = INT_MAX, i, size = 1, print;
-	char spec = config.spec, buf[20], *p = buf;
+	unsigned long int n = f.arg, max = get_max(f.spec, f.len),
+					  print = 0, i, size = 1E19, negafier = UINT_MAX;
+	char buf[21], *p = buf;
 
-	for (i = 0; i < 20; i++)
+	for (i = 0; i < 21; i++)
 		buf[i] = 0;
 
-	if (spec == 'c')
+	if (f.spec == 'c')
 	{
 		*p = n;
 		return (p);
 	}
 
-	if (spec == 'u')
-		max = UINT_MAX;
+	p = buf;
+	if (max > negafier)
+		negafier = ULONG_MAX;
 
-	if (n > max && config.longint == 0)
+	if (n > max)
 	{
-		if (spec == 'u')
-		{
-			n -= UINT_MAX;
-			n -= 1;
-		}
-		else
-		{
-			*p++ = '-';
-			n = ~(n - 1) & UINT_MAX;
-		}
+		*p++ = '-';
+		n = ~(n - 1) & negafier;
 	}
 
-	for (i = n, print = 0, size = 1000000000000000000; size; size /= 10)
+	for (; size; size /= 10)
 	{
-		if (i / size == 0 && print == 0)
-			continue;
-		print = 1;
-		*(p++) = (i / size) + '0';
-		i %= size;
+		if ((n / size) || print || size == 1)
+		{
+			print = 1;
+			*(p++) = (n / size) + '0';
+			n %= size;
+		}
 	}
 
 	p = buf;
 	return (p);
+}
+/**
+ * get_max - get max value
+ * @spec: format specifier
+ * @len: format length type
+ **/
+unsigned long int get_max(int spec, int len)
+{
+	if (spec == 'u')
+	{
+		if (len == 'l')
+			return (ULONG_MAX);
+
+		if (len == 'h')
+			return (USHRT_MAX);
+
+		return (UINT_MAX);
+	}
+
+	if (len == 'l')
+		return (LONG_MAX);
+
+	if (len == 'h')
+		return (SHRT_MAX);
+
+	return (INT_MAX);
 }

@@ -1,5 +1,5 @@
 #include "holberton.h"
-#define ITS_A_DIGIT (***in >= '0' && ***in <= '9')
+#define ITS_A_DIGIT (**in >= '0' && **in <= '9')
 
 /**
  * getprinter - matches a format specifier & calls its related function
@@ -10,15 +10,14 @@
  **/
 void getprinter(const char **in, char **out, va_list list)
 {
-	int i = 0;
 	char *specs = "cboxXdiup", *str;
-	config_t config = format_config(&in);
+	format f = format_config(in);
 
-	for (i = 0; specs[i]; i++)
-		if (specs[i] == **in)
+	while (*specs)
+		if (*specs++ == **in)
 		{
-			config.arg = va_arg(list, unsigned long int);
-			for (str = p_num(config); *str; (*out)++)
+			f.arg = va_arg(list, unsigned long int);
+			for (str = p_num(f); *str; (*out)++)
 			{
 				**out = *str;
 				if (*(++str) == '\0')
@@ -29,8 +28,8 @@ void getprinter(const char **in, char **out, va_list list)
 
 	if (**in == 's')
 	{
-		config.str = va_arg(list, char *);
-		for (str = p_s(config); *str; (*out)++)
+		f.str = va_arg(list, char *);
+		for (str = p_s(f); *str; (*out)++)
 		{
 			**out = *str;
 			if (*(++str) == '\0')
@@ -52,55 +51,55 @@ void getprinter(const char **in, char **out, va_list list)
  * @in: pointer to input string
  * Return: a filled out config struct
  **/
-config_t format_config(const char ***in)
+format format_config(const char **in)
 {
-	config_t config = {0};
+	format f = {0};
 
-	for (; 1; (**in)++)
-		if (***in == '-')
-			config.minus = true;
-		else if (***in == '+')
-			config.plus = true;
-		else if (***in == ' ')
-			config.space = true;
-		else if (***in == '0')
-			config.zero = true;
-		else if (***in == '#')
-			config.hash = true;
+	for (; 1; (*in)++)
+		if (**in == '-')
+			f.minus = true;
+		else if (**in == '+')
+			f.plus = true;
+		else if (**in == ' ')
+			f.space = true;
+		else if (**in == '0')
+			f.zero = true;
+		else if (**in == '#')
+			f.hash = true;
 		else
 			break;
 
-	for (; ITS_A_DIGIT; (**in)++)
-		config.width = (config.width * 10) + (***in - '0');
+	for (; ITS_A_DIGIT; (*in)++)
+		f.width = (f.width * 10) + (**in - '0');
 
-	if (***in == '.')
-		for ((**in)++; ITS_A_DIGIT; (**in)++)
-			config.precision = (config.precision * 10) + (***in - '0');
+	if (**in == '.')
+		for ((*in)++; ITS_A_DIGIT; (*in)++)
+			f.precision = (f.precision * 10) + (**in - '0');
 
-	if (***in == 'l')
+	if (**in == 'l')
 	{
-		config.longint = true;
-		(**in)++;
+		f.len = 'l';
+		(*in)++;
 	}
-	else if (***in == 'h')
+	else if (**in == 'h')
 	{
-		config.shortint = true;
-		(**in)++;
+		f.len = 'h';
+		(*in)++;
 	}
 
-	config.spec = ***in;
+	f.spec = **in;
 
-	return (config);
+	return (f);
 }
 
 /**
  * p_s - prints a string
- * @config: void
+ * @f: void
  * Return: formatted string
  **/
-char *p_s(config_t config)
+char *p_s(format f)
 {
-	char *str = config.str, *p = "(null)";
+	char *str = f.str, *p = "(null)";
 	size_t len = _strlen(str);
 	int i = 0;
 
