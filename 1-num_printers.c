@@ -25,17 +25,15 @@ num_t *num_config(char c)
 /**
  * p_num - prints numbers, addresses, and single chars
  * @f: config struct with algorithm configurations
+ * @list: arguments list
  * Return: formatted str
  */
-char *p_num(format f)
+char *p_num(format f, va_list list)
 {
+	unsigned long int n = va_arg(list, unsigned long int);
 	num_t *num = num_config(f.spec);
-	unsigned long int n = f.arg;
 	int i, ck, print = 0, bits = 32;
 	char buf[65], *p = buf;
-
-	if (num == NULL)
-		return (p_uidc(f));
 
 	for (i = 0; i < 65; i++)
 		buf[i] = 0;
@@ -66,20 +64,21 @@ char *p_num(format f)
 		*p = i + '0';
 
 	p = buf;
-
 	return (p);
 }
 
 /**
- * p_uidc - prints chars and base-10 integers
+ * p_base10 - prints chars and base-10 integers
  * @f: config struct with algorithm configurations
+ * @list: arguments list
  * Return: formatted str
  */
-char *p_uidc(format f)
+char *p_base10(format f, va_list list)
 {
-	unsigned long int n = f.arg, max = get_max(f.spec, f.len),
+	unsigned long int max = get_max(f.spec, f.len),
+					  n = va_arg(list, unsigned long int),
 					  print = 0, i, size = 1E19, negafier = UINT_MAX;
-	char buf[21], *p = buf;
+	char *buf = malloc(21), *p = buf;
 
 	for (i = 0; i < 21; i++)
 		buf[i] = 0;
@@ -125,18 +124,14 @@ unsigned long int get_max(int spec, int len)
 	{
 		if (len == 'l')
 			return (ULONG_MAX);
-
 		if (len == 'h')
 			return (USHRT_MAX);
-
 		return (UINT_MAX);
 	}
 
 	if (len == 'l')
 		return (LONG_MAX);
-
 	if (len == 'h')
 		return (SHRT_MAX);
-
 	return (INT_MAX);
 }
