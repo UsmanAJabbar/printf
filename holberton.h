@@ -73,8 +73,8 @@ char *strncopy_list(str_list *, int);
 /* INT PRINTER FUNCTIONS (1-num_printers.c) */
 char *p_num(va_list, str_list *);
 char *p_c(int, int *);
-char *p_base2(unsigned long int *, str_list *);
-char *p_base10(unsigned long int *, str_list *);
+char *p_base2(unsigned long int, str_list *);
+char *p_base10(unsigned long int, str_list *);
 
 /* STR PRINTER FUNCTIONS (2-str_printers.c) */
 char *p_s(va_list, str_list *);

@@ -8,14 +8,7 @@
  */
 char *p_num(va_list list, str_list *f)
 {
-	unsigned long int *n = va_arg(list, unsigned long int *);
-
-	if (n == NULL)
-	{
-		if (_strchr("poxX", f->type))
-			return (_strdup("(nil)"));
-		return (_strdup("0"));
-	}
+	unsigned long int n = va_arg(list, unsigned long int);
 
 	if (_strchr("uid", f->type))
 		return (p_base10(n, f));
@@ -58,10 +51,11 @@ char *p_c(int c, int *i_hate_this)
  * @f: format specifications
  * Return: pointer to decimal string representation of n
  **/
-char *p_base10(unsigned long int *n, str_list *f)
+char *p_base10(unsigned long int n, str_list *f)
 {
 	unsigned long int size = 1E19, print = 0, max;
 	char *buf = malloc(21), *tmp = buf;
+	int i = 1;
 
 	if (buf == NULL)
 		return (NULL);
@@ -75,25 +69,23 @@ char *p_base10(unsigned long int *n, str_list *f)
 
 	if (f->type != 'u')
 	{
-		if (*n > max)
+		if (n > max)
 		{
 			*buf++ = '-';
-			*n = ~(*n - 1) & (max < UINT_MAX ? UINT_MAX : ULONG_MAX);
+			n = ~(n - 1) & (max < UINT_MAX ? UINT_MAX : ULONG_MAX);
 		}
 		else if (f->plus)
 			*buf++ = '+';
 		else if (f->space)
 			*buf++ = ' ';
 	}
-
 	for (; size; size /= 10)
-		if ((*n / size) || print || size == 1)
+		if ((n / size) || print || size == 1)
 		{
 			print = 1;
-			*buf++ = (*n / size) + '0';
-			*n %= size;
+			*buf++ = (n / size) + '0';
+			n %= size;
 		}
-
 	*buf = '\0';
 	return (tmp);
 }
@@ -104,7 +96,7 @@ char *p_base10(unsigned long int *n, str_list *f)
  * @f: format specifications
  * Return: formatted str
  */
-char *p_base2(unsigned long int *n, str_list *f)
+char *p_base2(unsigned long int n, str_list *f)
 {
 	unsigned long int i, check, power = 4, hex_shift = 0, bits = 32, print = 0;
 	char *buf = malloc(65), *p = buf;
@@ -121,7 +113,6 @@ char *p_base2(unsigned long int *n, str_list *f)
 		hex_shift = 39;
 	else if (f->type == 'X')
 		hex_shift = 7;
-
 	if ((f->hash && f->type != 'b') || f->type == 'p')
 	{
 		*p++ = '0';
@@ -130,11 +121,10 @@ char *p_base2(unsigned long int *n, str_list *f)
 		else if (f->type == 'X')
 			*p++ = 'X';
 	}
-
 	while (bits)
 	{
 		for (i = 0, check = 1; check; check = bits % power)
-			i = (i << 1) + ((*n >> --bits) & 1);
+			i = (i << 1) + ((n >> --bits) & 1);
 		if (i > 9)
 			i += hex_shift;
 		if (!print)
@@ -142,7 +132,7 @@ char *p_base2(unsigned long int *n, str_list *f)
 		if (print)
 			*p++ = i + '0';
 	}
-	if (*n == 0)
+	if (n == 0)
 		*p++ = '0';
 	*p = '\0';
 	return (buf);
