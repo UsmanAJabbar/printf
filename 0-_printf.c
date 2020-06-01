@@ -18,6 +18,9 @@ int _printf(const char *format, ...)
 	va_start(list, format);
 
 	len = build_str_list(&h, list, format);
+	if (len == -1)
+		return (-1);
+
 	output = strncopy_list(h, len);
 	len = write(1, output, len);
 
@@ -39,7 +42,7 @@ int _printf(const char *format, ...)
  **/
 int build_str_list(str_list **h, va_list list, const char *str)
 {
-	int len = 0;
+	int len = 0, new_str_len;
 	const char *tmp = str;
 
 	if (str == NULL)
@@ -51,10 +54,16 @@ int build_str_list(str_list **h, va_list list, const char *str)
 			continue;
 		if (*str == '\0')
 			return (-1);
-		len += add_str(h, &str, tmp, list);
+		new_str_len = add_str(h, &str, tmp, list);
+		if (new_str_len == -1)
+			return (-1);
+		len += new_str_len;
 		tmp = ++str;
 	}
-	len += add_str(h, &str, tmp, list);
+	new_str_len = add_str(h, &str, tmp, list);
+	if (new_str_len == -1)
+		return (-1);
+	len += new_str_len;
 	return (len);
 }
 
@@ -68,11 +77,12 @@ int build_str_list(str_list **h, va_list list, const char *str)
  **/
 int add_str(str_list **h, const char **in, const char *alt, va_list list)
 {
-	str_list *tmp, *f = new_str_list_node();
+	str_list *tmp = *h, *f = new_str_list_node();
 
+	if (f == NULL)
+		return (-1);
 	if (*h)
 	{
-		tmp = *h;
 		while (tmp->next)
 			tmp = tmp->next;
 		tmp->next = f;
@@ -97,16 +107,15 @@ int add_str(str_list **h, const char **in, const char *alt, va_list list)
 	if (is_digit(**in))
 		for (f->has_min = true; is_digit(**in); (*in)++)
 			f->width = (f->width * 10) + (**in - '0');
-
 	if (**in == '.')
 		for (f->has_max = true, (*in)++; is_digit(**in); (*in)++)
 			f->precision = (f->precision * 10) + (**in - '0');
-
 	if (**in == 'l' || **in == 'h')
 		f->len = *(*in)++;
-
 	f->type = **in;
 	f->str = get_string(f, alt, list);
+	if (f->str == NULL)
+		return (-1);
 	return (_strlen(f->str));
 }
 
@@ -127,6 +136,8 @@ char *get_string(str_list *f, const char *alt, va_list list)
 		if (_strchr(pd[i].type, f->type))
 		{
 			tmp = pd[i].printer(list, f);
+			if (tmp == NULL)
+				return (NULL);
 			break;
 		}
 
@@ -139,6 +150,8 @@ char *get_string(str_list *f, const char *alt, va_list list)
 	len = _strlen(tmp);
 	total_len = len + arg_len;
 	arg = malloc(total_len + 1);
+	if (arg == NULL)
+		return (NULL);
 	for (i = 0; i < arg_len; i++)
 		arg[i] = alt[i];
 	for (j = 0; i < total_len; i++, j++)
@@ -158,6 +171,9 @@ char *strncopy_list(str_list *h, int n)
 {
 	int len, width, print_spaces, i, j, k;
 	char *buf = malloc(n + 1), space = ' ';
+
+	if (buf == NULL)
+		return (NULL);
 
 	for (i = 0; h; h = h->next)
 	{

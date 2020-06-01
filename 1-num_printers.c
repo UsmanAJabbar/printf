@@ -40,6 +40,8 @@ char *p_c(unsigned long int c, int *i_hate_this)
 		null_byte++;
 
 	str = malloc(2);
+	if (str == NULL)
+		return (NULL);
 	*str = c;
 	*(str + 1) = '\0';
 
@@ -56,6 +58,9 @@ char *p_base10(unsigned long int n, str_list *f)
 {
 	unsigned long int size = 1E19, print = 0, max;
 	char *buf = malloc(21), *tmp = buf;
+
+	if (buf == NULL)
+		return (NULL);
 
 	if (f->len == 'l')
 		max = LONG_MAX;
@@ -100,14 +105,14 @@ char *p_base2(unsigned long int n, str_list *f)
 	unsigned long int i, check, power = 4, hex_shift = 0, bits = 32, print = 0;
 	char *buf = malloc(65), *p = buf;
 
+	if (buf == NULL)
+		return (NULL);
 	if (f->len == 'l' || f->type == 'p')
 		bits = 64;
-
 	if (f->type == 'b')
 		power = 1;
 	else if (f->type == 'o')
 		power = 3;
-
 	if (f->type == 'x' || f->type == 'p')
 		hex_shift = 39;
 	else if (f->type == 'X')

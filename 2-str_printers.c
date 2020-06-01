@@ -10,7 +10,7 @@ char *p_s(va_list list, str_list *f)
 {
 	char *tmp = _strdup(va_arg(list, char *));
 
-	if (f->type == 's')
+	if (f->type == 's' || tmp == NULL)
 		return (tmp);
 
 	if (f->type == 'r')
@@ -38,15 +38,18 @@ char *p_S(char *s)
 
 	tmp = malloc(i + 3 * num_of_non_printable_chars + 1);
 
+	if (tmp == NULL)
+		return (NULL);
+
 	for (i = 0, j = 0; s[j]; i++, j++)
 		if (s[j] < 32 || s[j] > 126)
 		{
 			tmp[i++] = '\\';
 			tmp[i++] = 'x';
-			tmp[i++] = (s[j] / 16) + '0';
-			k = (s[j] % 16) + '0';
+			tmp[i++] = (s[j] / 10) + '0';
+			k = (s[j] % 10) + '0';
 			tmp[i] = k;
-			if (k > 9)
+			if (k > '9')
 				tmp[i] += 7;
 		}
 		else
@@ -112,6 +115,8 @@ char *p_mod(va_list list, str_list *f)
 
 	(void)list;
 	(void)f;
+	if (arg == NULL)
+		return (NULL);
 	arg[0] = '%';
 	arg[1] = '\0';
 	return (arg);

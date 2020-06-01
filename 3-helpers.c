@@ -30,6 +30,8 @@ char *_strdup(char *s)
 		return (_strdup("(null)"));
 
 	tmp = malloc(_strlen(s) + 1);
+	if (tmp == NULL)
+		return (NULL);
 	for (i = 0; s[i]; i++)
 		tmp[i] = s[i];
 
@@ -59,6 +61,9 @@ char *_strchr(char *s, char c)
 str_list *new_str_list_node(void)
 {
 	str_list *f = malloc(sizeof(str_list));
+
+	if (f == NULL)
+		return (NULL);
 
 	f->str = NULL;
 	f->type = 0;
