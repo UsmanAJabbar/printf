@@ -55,7 +55,6 @@ char *p_base10(unsigned long int n, str_list *f)
 {
 	unsigned long int size = 1E19, print = 0, max;
 	char *buf = malloc(21), *tmp = buf;
-	int i = 1;
 
 	if (buf == NULL)
 		return (NULL);
