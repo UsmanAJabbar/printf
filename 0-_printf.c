@@ -1,123 +1,189 @@
 #include "holberton.h"
-#define MEM_BLOCK 4096
+
 /**
  * _printf- acts a printf function
  * @in: string to be printed
  * Return: string length or -1 if failed
- */
+ **/
 int _printf(const char *in, ...)
 {
-	va_list args;
-	char out[MEM_BLOCK], *p;
-	int i;
+	va_list list;
+	int len;
+	char *output;
+	str_list *h = NULL;
 
 	if (in == NULL)
 		return (-1);
 
-	for (i = 0; i < MEM_BLOCK; i++)
-		out[i] = 0;
+	va_start(list, in);
 
-	va_start(args, in);
+	len = build_str_list(&h, list, in);
+	output = strncopy_list(h, len);
+	len = write(1, output, len);
 
-	for (p = out; *in; in++)
-		if (*in == '%')
-			if (*(++in))
-				getprinter(&in, &p, args);
-			else
-				return (-1);
-		else
-			*p++ = *in;
+	va_end(list);
+	free(output);
+	free_strlist(h);
 
-	va_end(args);
-
-	return (write(1, out, _strlen(out)));
-}
-
-/**
- * _strlen - length of string
- * @s: string
- * Return: length
- **/
-size_t _strlen(char *s)
-{
-	size_t len = 0;
-
-	if (s)
-		while (s[len])
-			len++;
+	add_times_user_tried_printing_a_null_byte(len);
 
 	return (len);
 }
 
 /**
- * getprinter - matches a format specifier & calls its related function
- * @in: pointer to input string
- * @out: pointer to out buffer
- * @list: imported list of arguments
- * Return: void
+ * build_str_list - creates a str_list
+ * @h: str_list head
+ * @list: argument list
+ * @str: string
+ * Return: number of chars stored
  **/
-void getprinter(const char **in, char **out, va_list list)
+int build_str_list(str_list **h, va_list list, const char *str)
 {
-	char *s = NULL;
-	printer ops[] = {{"cdiu", p_base10}, {"bopxX", p_num}, {"srR", p_s}};
-	format f = format_config(in);
-	int i, j;
+	int len = 0;
+	const char *tmp = str;
 
-	for (i = 0; i < 3; i++)
-		for (j = 0; ops[i].codes[j]; j++)
-			if (f.spec == ops[i].codes[j])
-				s = append(ops[i].f(f, list), out, "");
+	if (str == NULL)
+		return (-1);
 
-	if (s == NULL)
+	while (*str)
 	{
-		if (**in != '%')
-			*(*out)++ = '%';
-		*(*out)++ = **in;
+		if (*str++ != '%')
+			continue;
+		if (*str == '\0')
+			return (-1);
+		len += add_str(h, &str, tmp, list);
+		tmp = ++str;
 	}
+	len += add_str(h, &str, tmp, list);
+	return (len);
 }
 
 /**
- * format_config - creates & returns config for format printer
+ * add_str - adds a string and its format specifications to a str list
+ * @h: pointer to str list
  * @in: pointer to input string
+ * @alt: alternate string to add to list if argument string unavailable
+ * @list: argument list containing argument string
  * Return: a filled out config struct
  **/
-format format_config(const char **in)
+int add_str(str_list **h, const char **in, const char *alt, va_list list)
 {
-	format f = {0};
+	str_list *tmp, *f = new_str_list_node();
 
-	for (; 1; (*in)++)
+	if (*h)
+	{
+		tmp = *h;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = f;
+	}
+	else
+		*h = f;
+
+	for (; **in; (*in)++)
 		if (**in == '-')
-			f.minus = true;
+			f->minus = true;
 		else if (**in == '+')
-			f.plus = true;
+			f->plus = true;
 		else if (**in == ' ')
-			f.space = true;
+			f->space = true;
 		else if (**in == '0')
-			f.zero = true;
+			f->zero = true;
 		else if (**in == '#')
-			f.hash = true;
+			f->hash = true;
 		else
 			break;
 
-	for (; ITS_A_DIGIT; (*in)++)
-		f.width = (f.width * 10) + (**in - '0');
+	if (is_digit(**in))
+		for (f->has_min = true; is_digit(**in); (*in)++)
+			f->width = (f->width * 10) + (**in - '0');
 
 	if (**in == '.')
-		for ((*in)++; ITS_A_DIGIT; (*in)++)
-			f.precision = (f.precision * 10) + (**in - '0');
+		for (f->has_max = true, (*in)++; is_digit(**in); (*in)++)
+			f->precision = (f->precision * 10) + (**in - '0');
 
-	if (**in == 'l')
+	if (**in == 'l' || **in == 'h')
+		f->len = *(*in)++;
+
+	f->type = **in;
+	f->str = get_string(f, alt, list);
+	return (_strlen(f->str));
+}
+
+/**
+ * get_string - gets string
+ * @f: format config
+ * @alt: alternate string (if format type is unknown)
+ * @list: argument list
+ * Return: string
+ **/
+char *get_string(str_list *f, const char *alt, va_list list)
+{
+	print_dict pd[] = {{"bcdiopuxX", p_num}, {"srRS", p_s}, {"%", p_mod}};
+	int i, j, len, arg_len, total_len;
+	char *arg = NULL, *tmp = NULL;
+
+	for (i = 0; i < 3; i++)
+		if (_strchr(pd[i].type, f->type))
+		{
+			tmp = pd[i].printer(list, f);
+			break;
+		}
+
+	for (i = 0; alt[i] && alt[i] != '%'; i++)
+		;
+	arg_len = i;
+	if (tmp == NULL && alt[i])
+		for (arg_len++; alt[i] != f->type; i++)
+			arg_len++;
+	len = _strlen(tmp);
+	total_len = len + arg_len;
+	arg = malloc(total_len + 1);
+	for (i = 0; i < arg_len; i++)
+		arg[i] = alt[i];
+	for (j = 0; i < total_len; i++, j++)
+		arg[i] = tmp[j];
+	arg[i] = '\0';
+	free(tmp);
+	return (arg);
+}
+
+/**
+ * strncopy_list - copies strings in a str list onto a buffer
+ * @h: head of list
+ * @n: number of bytes to allocate to string
+ * Return: void
+ **/
+char *strncopy_list(str_list *h, int n)
+{
+	int len, width, print_spaces, i, j, k;
+	char *buf = malloc(n + 1), space = ' ';
+
+	for (i = 0; h; h = h->next)
 	{
-		f.len = 'l';
-		(*in)++;
-	}
-	else if (**in == 'h')
-	{
-		f.len = 'h';
-		(*in)++;
-	}
+		len = _strlen(h->str);
+		print_spaces = ~(h->minus);
 
-	f.spec = **in;
+		if (h->has_max)
+			len = min(h->precision, len);
+		if (h->has_min)
+			width = max(h->width, len);
+		else
+			width = len;
 
-	return (f);
+		if (h->zero && _strchr("bcdiopuxX", h->type))
+			space = '0';
+
+		for (k = i; i - k < width; print_spaces = true)
+		{
+			if (print_spaces == true)
+				for (j = i + width - len; i < j; i++, j++)
+					buf[i] = space;
+
+			for (j = 0; i - k < len; i++, j++)
+				buf[i] = h->str[j];
+		}
+	}
+	buf[i] = '\0';
+	return (buf);
 }

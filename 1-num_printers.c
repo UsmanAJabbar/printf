@@ -1,137 +1,140 @@
 #include "holberton.h"
-/**
- * num_config - returns a numconfig struct
- * @c: format specifier to match with numconfig struct
- * Return: num_t struct
- */
-num_t *num_config(char c)
-{
-	num_t *num = NULL;
-	num_t nums[] = {
-		{'b', 1, 0},
-		{'o', 3, 0},
-		{'x', 4, 39},
-		{'X', 4, 7},
-		{'p', 4, 39},
-	};
-	int i;
 
-	for (i = 0; i < 5; i++)
-		if (nums[i].spec == c)
-			num = &nums[i];
-
-	return (num);
-}
 /**
- * p_num - prints numbers, addresses, and single chars
- * @f: config struct with algorithm configurations
+ * p_num - prints chars and base-10 integers
  * @list: arguments list
+ * @f: format specifications
  * Return: formatted str
  */
-char *p_num(format f, va_list list)
+char *p_num(va_list list, str_list *f)
 {
 	unsigned long int n = va_arg(list, unsigned long int);
-	num_t *num = num_config(f.spec);
-	int i, ck, print = 0, bits = 32;
-	char buf[65], *p = buf;
 
-	for (i = 0; i < 65; i++)
-		buf[i] = 0;
+	if (f->type == 'c')
+		return (p_c(n, NULL));
 
-	if (f.spec == 'p')
+	if (_strchr("uid", f->type))
+		return (p_base10(n, f));
+
+	return (p_base2(n, f));
+}
+
+/**
+ * p_c - print char
+ * @c: char
+ * @i_hate_this: ugh
+ * Return: char string
+ **/
+char *p_c(unsigned long int c, int *i_hate_this)
+{
+	static int null_byte;
+	char *str;
+
+	if (i_hate_this)
 	{
-		*p++ = '0';
-		*p++ = 'x';
-		bits = 64;
+		*i_hate_this += null_byte;
+		return (NULL);
 	}
 
-	if (f.len == 1)
+	if (c == '\0')
+		null_byte++;
+
+	str = malloc(2);
+	*str = c;
+	*(str + 1) = '\0';
+
+	return (str);
+}
+
+/**
+ * p_base10 - returns a decimal string representation of a number
+ * @n: num to turn to str
+ * @f: format specifications
+ * Return: pointer to decimal string representation of n
+ **/
+char *p_base10(unsigned long int n, str_list *f)
+{
+	unsigned long int size = 1E19, print = 0, max;
+	char *buf = malloc(21), *tmp = buf;
+
+	if (f->len == 'l')
+		max = LONG_MAX;
+	if (f->len == 'h')
+		max = SHRT_MAX;
+	else
+		max = INT_MAX;
+
+	if (f->type != 'u')
+	{
+		if (n > max)
+		{
+			*buf++ = '-';
+			n = ~(n - 1) & (max < UINT_MAX ? UINT_MAX : ULONG_MAX);
+		}
+		else if (f->plus)
+			*buf++ = '+';
+		else if (f->space)
+			*buf++ = ' ';
+	}
+
+	for (; size; size /= 10)
+		if ((n / size) || print || size == 1)
+		{
+			print = 1;
+			*buf++ = (n / size) + '0';
+			n %= size;
+		}
+
+	*buf = '\0';
+	return (tmp);
+}
+
+/**
+ * p_base2 - prints numbers, addresses, and single chars
+ * @n: number to print
+ * @f: format specifications
+ * Return: formatted str
+ */
+char *p_base2(unsigned long int n, str_list *f)
+{
+	unsigned long int i, check, power = 4, hex_shift = 0, bits = 32, print = 0;
+	char *buf = malloc(65), *p = buf;
+
+	if (f->len == 'l' || f->type == 'p')
 		bits = 64;
+
+	if (f->type == 'b')
+		power = 1;
+	else if (f->type == 'o')
+		power = 3;
+
+	if (f->type == 'x' || f->type == 'p')
+		hex_shift = 39;
+	else if (f->type == 'X')
+		hex_shift = 7;
+
+	if ((f->hash && f->type != 'b') || f->type == 'p')
+	{
+		*p++ = '0';
+		if (f->type == 'x' || f->type == 'p')
+			*p++ = 'x';
+		else if (f->type == 'X')
+			*p++ = 'X';
+	}
 
 	while (bits)
 	{
-		for (i = 0, ck = 1; ck; ck = bits % num->power)
+		for (i = 0, check = 1; check; check = bits % power)
 			i = (i << 1) + ((n >> --bits) & 1);
 		if (i > 9)
-			i += num->hex_char;
+			i += hex_shift;
 		if (!print)
 			print = (i & 15);
 		if (print)
 			*p++ = i + '0';
 	}
-
 	if (n == 0)
-		*p = i + '0';
-
-	p = buf;
-	return (p);
-}
-
-/**
- * p_base10 - prints chars and base-10 integers
- * @f: config struct with algorithm configurations
- * @list: arguments list
- * Return: formatted str
- */
-char *p_base10(format f, va_list list)
-{
-	unsigned long int max = get_max(f.spec, f.len),
-					  n = va_arg(list, unsigned long int),
-					  print = 0, i, size = 1E19, negafier = UINT_MAX;
-	char *buf = malloc(21), *p = buf;
-
-	for (i = 0; i < 21; i++)
-		buf[i] = 0;
-
-	if (f.spec == 'c')
-	{
-		*p = n;
-		return (p);
-	}
-
-	p = buf;
-	if (max > negafier)
-		negafier = ULONG_MAX;
-
-	if (n > max)
-	{
-		*p++ = '-';
-		n = ~(n - 1) & negafier;
-	}
-
-	for (; size; size /= 10)
-	{
-		if ((n / size) || print || size == 1)
-		{
-			print = 1;
-			*(p++) = (n / size) + '0';
-			n %= size;
-		}
-	}
-
-	p = buf;
-	return (p);
-}
-/**
- * get_max - get max value
- * @spec: format specifier
- * @len: format length type
- * Return: max value
- **/
-unsigned long int get_max(int spec, int len)
-{
-	if (spec == 'u')
-	{
-		if (len == 'l')
-			return (ULONG_MAX);
-		if (len == 'h')
-			return (USHRT_MAX);
-		return (UINT_MAX);
-	}
-
-	if (len == 'l')
-		return (LONG_MAX);
-	if (len == 'h')
-		return (SHRT_MAX);
-	return (INT_MAX);
+		*p++ = '0';
+	*p = '\0';
+	return (buf);
 }

@@ -1,81 +1,93 @@
 #ifndef _HOLBERTON_H
 #define _HOLBERTON_H
 
+/* HEADER FILES */
 #include <stdarg.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <limits.h>
-#include <stdbool.h>
 
-#define ITS_A_DIGIT (**in >= '0' && **in <= '9')
+/* PRE-PROCESSOR DIRECTIVES */
+#define is_alpha(a) ((a >= 'A' && a <= 'Z') || (a >= 'a' && a <= 'z'))
+#define max(a, b) ((a) > (b) ? (a) : (b))
+#define min(a, b) ((a) < (b) ? (a) : (b))
+#define is_digit(a) ((a) >= '0' && (a) <= '9')
+#define add_times_user_tried_printing_a_null_byte(a) p_c(0, &a)
+#define true 1
+#define false 0
 
-/**
- * struct num_s - struct that stores number formatting configurations
- * @spec:		format specifier
- * @power:		exp value associated with @spec. determines function behavior
- * @hex_char:	assists in printing chars for hex bases. 0 for other bases
- **/
-typedef struct num_s
-{
-	char spec;
-	int power;
-	int hex_char;
-} num_t;
+/* STRUCTS */
 
 /**
- * struct config_s - struct that stores print format configuration settings
- * @spec:		format specifier code
+ * struct str_list_s - node of list of strings and their format specifications
+ * @str:		string
+ * @type:		string type (e.g. s in '%s', c in '%c')
  * @len:		if 1, print long int. if -1, print short int.
  * @minus:		if 1, print right-aligned
  * @plus:		if 1, print the '+' sign before an integer
  * @space:		if 1, print placeholder chars with spaces
  * @zero:		if 1, print placeholder chars with zeroes
  * @hash:		if 1, print non-base 10 digits with prefixes
+ * @has_min:	has a width value
  * @width:		minimum number of chars to print
+ * @has_max:	has a precision value
  * @precision:	maximum number of chars to print
+ * @next:		pointer to next str_list node
  **/
-typedef struct config_s
+typedef struct str_list_s
 {
-	int spec;
+	char *str;
+	int type;
 	int len;
 	int minus;
 	int plus;
 	int space;
 	int zero;
 	int hash;
+	int has_min;
 	int width;
+	int has_max;
 	int precision;
-} format;
+	struct str_list_s *next;
+} str_list;
 
 /**
- * struct printer_s - matches a format specifier with a printer
- * @codes:		allowable format specifiers for...
- * @f:	...this specific printer
+ * struct p_dict_s - matches a format specifier with a printer
+ * @type:	allowable format specifiers for...
+ * @printer:		...this specific printer
  **/
-typedef struct printer_s
+typedef struct p_dict_s
 {
-	char *codes;
-	char *(*f)(format, va_list);
-} printer;
+	char *type;
+	char *(*printer)(va_list, str_list *);
+} print_dict;
 
-size_t _strlen(char *s);
+/* MAIN FUNCTIONS  (0-printf.c) */
+int _printf(const char *, ...);
+int build_str_list(str_list **, va_list, const char *);
+int add_str(str_list **, const char **, const char *, va_list);
+char *get_string(str_list *, const char *, va_list);
+char *strncopy_list(str_list *, int);
 
-int _printf(const char *format, ...);
+/* INT PRINTER FUNCTIONS (1-num_printers.c) */
+char *p_num(va_list, str_list *);
+char *p_c(unsigned long int, int *);
+char *p_base2(unsigned long int, str_list *);
+char *p_base10(unsigned long int, str_list *);
 
-format format_config(const char **);
+/* STR PRINTER FUNCTIONS (2-str_printers.c) */
+char *p_s(va_list, str_list *);
+char *rev_string(char *);
+char *rot13(char *);
+char *p_S(char *);
+char *p_mod(va_list, str_list *);
 
-num_t *num_config(char c);
-
-char *p_s(format, va_list);
-char *p_num(format, va_list);
-char *p_base10(format, va_list);
-char *append(char *, char **, char *);
-char *append_rev(char *, char **);
-char *append_rot13(char *, char **);
-
-unsigned long int get_max(int spec, int len);
-
-void getprinter(const char **, char **, va_list);
+/* HELPER FUNCTIONS (3-helpers.c) */
+char *_strchr(char *, char);
+char *_strdup(char *);
+size_t _strlen(char *);
+void free_strlist(str_list *);
+str_list *new_str_list_node(void);
 
 #endif /* HOLBERTON_H */

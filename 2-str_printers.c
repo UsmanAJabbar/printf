@@ -2,99 +2,117 @@
 
 /**
  * p_s - prints a string
- * @f: void
  * @list: arguments list`
+ * @f: void
  * Return: formatted string
  **/
-char *p_s(format f, va_list list)
+char *p_s(va_list list, str_list *f)
 {
-	char *s = va_arg(list, char *);
-	char *p = malloc(sizeof(char) * _strlen(s) + 1);
-	char *alt = "(null)";
+	char *tmp = _strdup(va_arg(list, char *));
 
-	if (s == NULL)
-		return (append("(null)", &p, ""));
+	if (f->type == 's')
+		return (tmp);
 
-	if (f.spec == 'r')
-		return (append_rev(s, &p));
-	else if (f.spec == 'R')
-		return (append_rot13(s, &p));
-	else
-		return (append(s, &p, alt));
+	if (f->type == 'r')
+		return (rev_string(tmp));
+
+	if (f->type == 'R')
+		return (rot13(tmp));
+
+	return (p_S(tmp));
 }
 
 /**
- * append_rot13 - appends a rot13'd string to a buffer
- * @s:      string to append to...
- * @buf:    ...buffer
- * Return: address of beginning of string
+ * p_S - replaces non-printable chars with a hex-output of ASCII code
+ * @s: string
+ * Return: new string
  **/
-char *append_rot13(char *s, char **buf)
+char *p_S(char *s)
 {
-	int rot = 13;
-	char *head = s;
+	int i = 0, j, k, num_of_non_printable_chars = 0;
+	char *tmp;
 
-	for (; *s; rot = 13)
-	{
-		if (*s >= 'a' && *s <= 'z')
+	for (; s[i]; i++)
+		if (s[i] < 32 || s[i] > 126)
+			num_of_non_printable_chars++;
+
+	tmp = malloc(i + 3 * num_of_non_printable_chars + 1);
+
+	for (i = 0, j = 0; s[j]; i++, j++)
+		if (s[j] < 32 || s[j] > 126)
 		{
-			if (*s >= 'n')
-				rot = -rot;
-			*(*buf)++ = *s++ + rot;
-		}
-		else if (*s >= 'A' && *s <= 'Z')
-		{
-			if (*s >= 'N')
-				rot = -rot;
-			*(*buf)++ = *s++ + rot;
+			tmp[i++] = '\\';
+			tmp[i++] = 'x';
+			tmp[i++] = (s[j] / 16) + '0';
+			k = (s[j] % 16) + '0';
+			tmp[i] = k;
+			if (k > 9)
+				tmp[i] += 7;
 		}
 		else
+			tmp[i] = s[j];
+
+	tmp[i] = '\0';
+	free(s);
+	return (tmp);
+}
+
+/**
+ * rot13 - rot13's a string
+ * @s: string to turn into rot13 format
+ * Return: string length
+ **/
+char *rot13(char *s)
+{
+	int i;
+
+	for (i = 0; s[i]; i++)
+		if (is_alpha(s[i]))
 		{
-			*(*buf)++ = *s++;
+			if (s[i] >= 'n' || (s[i] >= 'N' && s[i] <= 'Z'))
+				s[i] -= 13;
+			else
+				s[i] += 13;
 		}
+
+	return (s);
+}
+
+/**
+ * rev_string - reverses a string
+ * @s: string to reverse
+ * Return: string length
+ **/
+char *rev_string(char *s)
+{
+	int i = 0, j = _strlen(s) - 1;
+	char tmp;
+
+	while (i != j)
+	{
+		tmp = s[i];
+		s[i] = s[j];
+		s[j] = tmp;
+		if (++i == j--)
+			break;
 	}
 
-	return (head);
+	return (s);
 }
 
 /**
- * append - appends a string to a buffer
- * @s:      string to append to...
- * @buf:    ...buffer
- * @alt:    alternate string (if s is NULL)
- * Return: address of beginning of string
+ * p_mod - prints a '%' sign
+ * @list: void
+ * @f: void
+ * Return: '%' as a malloc'd string
  **/
-char *append(char *s, char **buf, char *alt)
+char *p_mod(va_list list, str_list *f)
 {
-	char *head = *buf;
+	char *arg = malloc(2);
 
-	if (s == NULL)
-		return (append(alt, buf, ""));
-
-	while (*s)
-		*(*buf)++ = *s++;
-
-	**buf = *s;
-
-	return (head);
-}
-
-/**
- * append_rev - appends a string in reverse to a buffer
- * @s:      string to reverse and append to..
- * @buf:    ...buffer
- * Return: address of beginning of string
- **/
-char *append_rev(char *s, char **buf)
-{
-	char *p = s, *head = *buf;
-
-	while (*p)
-		p++;
-
-	while (--p != s)
-		*(*buf)++ = *p;
-	*(*buf)++ = *s;
-
-	return (head);
+	(void)list;
+	(void)f;
+	arg[0] = '%';
+	arg[1] = '\0';
+	return (arg);
 }
