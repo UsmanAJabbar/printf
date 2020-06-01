@@ -8,7 +8,12 @@
  **/
 char *p_s(va_list list, str_list *f)
 {
-	char *tmp = _strdup(va_arg(list, char *));
+	char *tmp;
+
+	if (f->type == 'c')
+		return (p_c(va_arg(list, int), NULL));
+
+	tmp = _strdup(va_arg(list, char *));
 
 	if (f->type == 's' || tmp == NULL)
 		return (tmp);

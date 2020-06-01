@@ -128,7 +128,7 @@ int add_str(str_list **h, const char **in, const char *alt, va_list list)
  **/
 char *get_string(str_list *f, const char *alt, va_list list)
 {
-	print_dict pd[] = {{"bcdiopuxX", p_num}, {"srRS", p_s}, {"%", p_mod}};
+	print_dict pd[] = {{"bdiopuxX", p_num}, {"csrRS", p_s}, {"%", p_mod}};
 	int i, j, len, arg_len, total_len;
 	char *arg = NULL, *tmp = NULL;
 

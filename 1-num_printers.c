@@ -17,9 +17,6 @@ char *p_num(va_list list, str_list *f)
 		return (_strdup("0"));
 	}
 
-	if (f->type == 'c')
-		return (p_c(n, NULL));
-
 	if (_strchr("uid", f->type))
 		return (p_base10(n, f));
 
@@ -32,7 +29,7 @@ char *p_num(va_list list, str_list *f)
  * @i_hate_this: ugh
  * Return: char string
  **/
-char *p_c(unsigned long int *c, int *i_hate_this)
+char *p_c(int c, int *i_hate_this)
 {
 	static int null_byte;
 	char *str;
@@ -43,13 +40,13 @@ char *p_c(unsigned long int *c, int *i_hate_this)
 		return (NULL);
 	}
 
-	if (*c == '\0')
+	if (c == '\0')
 		null_byte++;
 
 	str = malloc(2);
 	if (str == NULL)
 		return (NULL);
-	*str = *c;
+	*str = c;
 	*(str + 1) = '\0';
 
 	return (str);
