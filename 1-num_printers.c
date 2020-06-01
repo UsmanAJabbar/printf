@@ -10,11 +10,15 @@ char *p_num(va_list list, str_list *f)
 {
 	unsigned long int *n = va_arg(list, unsigned long int *);
 
+	if (n == NULL)
+	{
+		if (_strchr("poxX", f->type))
+			return (_strdup("(nil)"));
+		return (_strdup("0"));
+	}
+
 	if (f->type == 'c')
 		return (p_c(n, NULL));
-
-	if (n == NULL)
-		return (_strdup("(nil)"));
 
 	if (_strchr("uid", f->type))
 		return (p_base10(n, f));
