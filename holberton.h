@@ -64,7 +64,7 @@ typedef struct p_dict_s
 } print_dict;
 
 /* MAIN FUNCTIONS  (0-printf.c) */
-int _printf(const char *, ...);
+int _printf(const char *format, ...);
 int build_str_list(str_list **, va_list, const char *);
 int add_str(str_list **, const char **, const char *, va_list);
 char *get_string(str_list *, const char *, va_list);

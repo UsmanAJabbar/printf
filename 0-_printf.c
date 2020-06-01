@@ -5,19 +5,19 @@
  * @in: string to be printed
  * Return: string length or -1 if failed
  **/
-int _printf(const char *in, ...)
+int _printf(const char *format, ...)
 {
 	va_list list;
 	int len;
 	char *output;
 	str_list *h = NULL;
 
-	if (in == NULL)
+	if (format == NULL)
 		return (-1);
 
-	va_start(list, in);
+	va_start(list, format);
 
-	len = build_str_list(&h, list, in);
+	len = build_str_list(&h, list, format);
 	output = strncopy_list(h, len);
 	len = write(1, output, len);
 
