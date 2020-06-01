@@ -2,7 +2,7 @@
 
 /**
  * _printf- acts a printf function
- * @in: string to be printed
+ * @format: string to be printed
  * Return: string length or -1 if failed
  **/
 int _printf(const char *format, ...)
